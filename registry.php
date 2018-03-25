@@ -90,7 +90,7 @@ class OllaCore	{
 	 */
 
 	public function load_textdomain() {
-		load_plugin_textdomain( 'fusion', FALSE, basename( dirname( __FILE__ ) ) . '/languages/' );
+		load_plugin_textdomain( 'olla', FALSE, basename( dirname( __FILE__ ) ) . '/languages/' );
 	}
 
 	/**
@@ -111,7 +111,7 @@ class OllaCore	{
 			}
 			//check if using Fusion Base theme
 			$template = get_option('template');
-				if ($template != 'fusion-base') {
+				if ($template != 'olla-base') {
 				//enable front end bootstrap
 				if (empty($options['olla_bootstrap_enable'])) {
 					$options['olla_bootstrap_enable'] = 'on';
@@ -163,7 +163,7 @@ class OllaCore	{
 		if ( ($hook_suffix == 'post.php' || $hook_suffix == 'post-new.php') && ( (post_type_exists('notification') && $post->post_type == 'notification') || (!empty($olla_post_types) && is_array($olla_post_types) && in_array($post->post_type, $olla_post_types)) ) ) {
 			//bootstrap
 			wp_enqueue_script( 'bootstrap_admin', plugin_dir_url( __FILE__ ) . 'assets/admin/js/bootstrap.min.js', false, '3.3.5', true );
-			
+
 			//jQuery UI
 			wp_enqueue_style( 'jquery-ui-custom', plugin_dir_url( __FILE__ ) . 'includes/css/jquery-ui-1.11.4.custom/jquery-ui.min.css', false, '1.11.4' );
 			wp_enqueue_script('jquery-ui-sortable');
@@ -173,8 +173,8 @@ class OllaCore	{
 			wp_enqueue_script( 'wp-color-picker' );
 			wp_enqueue_style( 'wp-color-picker' );
 			//plugin
-			wp_enqueue_script( 'olla_core_admin', plugin_dir_url( __FILE__ ) . 'includes/js/fusion-core-admin.js', array('jquery'), '1.3.0', true );
-			wp_enqueue_style( 'olla_core_admin', plugin_dir_url( __FILE__ ) . 'includes/css/fusion-core-admin.css', false, '1.3.0' );
+			wp_enqueue_script( 'olla_core_admin', plugin_dir_url( __FILE__ ) . 'includes/js/olla-core-admin.js', array('jquery'), '1.3.0', true );
+			wp_enqueue_style( 'olla_core_admin', plugin_dir_url( __FILE__ ) . 'includes/css/olla-core-admin.css', false, '1.3.0' );
 			if ($user_admin_color != 'fresh') {
 				wp_enqueue_style( 'olla_core_admin_color_scheme', plugin_dir_url( __FILE__ ) . 'includes/css/colors/'. $user_admin_color .'/colors.css', false, '1.3.0' );
 			}
@@ -185,70 +185,70 @@ class OllaCore	{
 
 			//add translation strings to script
 			$translation_array = array(
-				'error' => __('Oops, something went wrong. Please reload the page and try again.','fusion'),
-				'search' => __('Start typing to search...', 'fusion'),
-				'text_label' => __('Text', 'fusion'),
-				'edit' => __('Edit', 'fusion'),
-				'duplicate' => __('Duplicate', 'fusion'),
-				'delete' => __('Delete', 'fusion'),
-				'move_up' => __('Move Up', 'fusion'),
-				'move_down' => __('Move Down', 'fusion'),
-				'move_top' => __('Move to Top', 'fusion'),
-				'move_bottom' => __('Move to Bottom', 'fusion'),
-				'row_options' => __('Row Options', 'fusion'),
-				'row_edit' => __('Edit Row', 'fusion'),
-				'row_add' => __('Add Row', 'fusion'),
-				'column_options' => __('Column Options', 'fusion'),
-				'column_edit' => __('Edit Column', 'fusion'),
-				'column_add' => __('Add Column', 'fusion'),
-				'element_options' => __('Element Options', 'fusion'),
-				'element_edit' => __('Edit Element', 'fusion'),
-				'element_add' => __('Add Element', 'fusion'),
-				'tabs_options' => __('Tabs Options', 'fusion'),
-				'tabs_edit' => __('Edit Tabs', 'fusion'),
-				'tab_options' => __('Tab Options', 'fusion'),
-				'tab_edit' => __('Edit Tab', 'fusion'),
-				'tab_add' => __('Add Tab', 'fusion'),
-				'tab_new' => __('New Tab', 'fusion'),
-				'tabs_title' => __('Tabs', 'fusion'),
-				'tab_1_title' => __('Tab 1', 'fusion'),
-				'tab_2_title' => __('Tab 2', 'fusion'),
-				'template_save_success' => __('Template Saved Successfully.', 'fusion'),
-				'template_save_error' => __('There was an error saving the template. Please try again.', 'fusion'),
-				'template_delete_error' => __('There was an error deleting the template. Please try again.', 'fusion'),
-				'template_delete_all' => __('There are no saved templates remaining.', 'fusion'),
-				'template_options' => __('Template Options', 'fusion'),
-				'custom_list_item_collapse' => __('collapse', 'fusion'),
-				'custom_list_item_expand' => __('expand', 'fusion'),
-				'notice_dismiss' => __('Dismiss this notice.', 'fusion'),
-				'button_summary_type' => __('Type', 'fusion'),
-				'button_summary_external' => __('External Link', 'fusion'),
-				'button_summary_internal' => __('Internal Link', 'fusion'),
-				'button_summary_collapse' => __('Collapse', 'fusion'),
-				'button_summary_modal' => __('Modal', 'fusion'),
-				'button_summary_link' => __('Links to', 'fusion'),
-				'button_summary_label' => __('Label', 'fusion'),
-				'button_summary_target' => __('Opens in', 'fusion'),
-				'button_summary_target_blank' => __('New Window / Tab', 'fusion'),
-				'button_summary_target_parent' => __('Parent Frame', 'fusion'),
-				'button_summary_target_top' => __('Full Body of the Window', 'fusion'),
-				'button_summary_target_default' => __('Current Window / Tab', 'fusion'),
-				'button_summary_opens' => __('Opens', 'fusion'),
-				'button_summary_collapse_show' => __('Show Label', 'fusion'),
-				'button_summary_collapse_hide' => __('Hide Label', 'fusion'),
-				'media_image_select' => __('Select Image', 'fusion'),
-				'media_image_use' => __('Use This Image', 'fusion'),
-				'media_video_select' => __('Select Video', 'fusion'),
-				'media_video_use' => __('Use This Video', 'fusion')
+				'error' => __('Oops, something went wrong. Please reload the page and try again.','olla'),
+				'search' => __('Start typing to search...', 'olla'),
+				'text_label' => __('Text', 'olla'),
+				'edit' => __('Edit', 'olla'),
+				'duplicate' => __('Duplicate', 'olla'),
+				'delete' => __('Delete', 'olla'),
+				'move_up' => __('Move Up', 'olla'),
+				'move_down' => __('Move Down', 'olla'),
+				'move_top' => __('Move to Top', 'olla'),
+				'move_bottom' => __('Move to Bottom', 'olla'),
+				'row_options' => __('Row Options', 'olla'),
+				'row_edit' => __('Edit Row', 'olla'),
+				'row_add' => __('Add Row', 'olla'),
+				'column_options' => __('Column Options', 'olla'),
+				'column_edit' => __('Edit Column', 'olla'),
+				'column_add' => __('Add Column', 'olla'),
+				'element_options' => __('Element Options', 'olla'),
+				'element_edit' => __('Edit Element', 'olla'),
+				'element_add' => __('Add Element', 'olla'),
+				'tabs_options' => __('Tabs Options', 'olla'),
+				'tabs_edit' => __('Edit Tabs', 'olla'),
+				'tab_options' => __('Tab Options', 'olla'),
+				'tab_edit' => __('Edit Tab', 'olla'),
+				'tab_add' => __('Add Tab', 'olla'),
+				'tab_new' => __('New Tab', 'olla'),
+				'tabs_title' => __('Tabs', 'olla'),
+				'tab_1_title' => __('Tab 1', 'olla'),
+				'tab_2_title' => __('Tab 2', 'olla'),
+				'template_save_success' => __('Template Saved Successfully.', 'olla'),
+				'template_save_error' => __('There was an error saving the template. Please try again.', 'olla'),
+				'template_delete_error' => __('There was an error deleting the template. Please try again.', 'olla'),
+				'template_delete_all' => __('There are no saved templates remaining.', 'olla'),
+				'template_options' => __('Template Options', 'olla'),
+				'custom_list_item_collapse' => __('collapse', 'olla'),
+				'custom_list_item_expand' => __('expand', 'olla'),
+				'notice_dismiss' => __('Dismiss this notice.', 'olla'),
+				'button_summary_type' => __('Type', 'olla'),
+				'button_summary_external' => __('External Link', 'olla'),
+				'button_summary_internal' => __('Internal Link', 'olla'),
+				'button_summary_collapse' => __('Collapse', 'olla'),
+				'button_summary_modal' => __('Modal', 'olla'),
+				'button_summary_link' => __('Links to', 'olla'),
+				'button_summary_label' => __('Label', 'olla'),
+				'button_summary_target' => __('Opens in', 'olla'),
+				'button_summary_target_blank' => __('New Window / Tab', 'olla'),
+				'button_summary_target_parent' => __('Parent Frame', 'olla'),
+				'button_summary_target_top' => __('Full Body of the Window', 'olla'),
+				'button_summary_target_default' => __('Current Window / Tab', 'olla'),
+				'button_summary_opens' => __('Opens', 'olla'),
+				'button_summary_collapse_show' => __('Show Label', 'olla'),
+				'button_summary_collapse_hide' => __('Hide Label', 'olla'),
+				'media_image_select' => __('Select Image', 'olla'),
+				'media_image_use' => __('Use This Image', 'olla'),
+				'media_video_select' => __('Select Video', 'olla'),
+				'media_video_use' => __('Use This Video', 'olla')
 			);
 			wp_localize_script('olla_core_admin', 'ollaL10n', $translation_array);
 		}
-		//fusion core query
-		wp_register_script( 'olla_core_query', plugin_dir_url( __FILE__ ) . 'includes/js/fusion-core-query.js', array('jquery'), '1.3.0', true );
+		//olla core query
+		wp_register_script( 'olla_core_query', plugin_dir_url( __FILE__ ) . 'includes/js/olla-core-query.js', array('jquery'), '1.3.0', true );
 		wp_localize_script( 'olla_core_query', 'ollaQuery', array(
 				'ajaxurl' => admin_url( 'admin-ajax.php' ),
 				'ollaQueryNonce' => wp_create_nonce('olla-query'),
-				'ollaQueryError' => __('Oops, something went wrong with your query. Please reload the page and try again.','fusion'),
+				'ollaQueryError' => __('Oops, something went wrong with your query. Please reload the page and try again.','olla'),
 			)
 		);
 		//select2
@@ -270,15 +270,15 @@ class OllaCore	{
 		if (!empty($bootstrap_enable)) {
 			wp_enqueue_script( 'bootstrap', plugin_dir_url( __FILE__ ) . 'includes/bootstrap/front/js/bootstrap.min.js', false, '3.3.5', true );
 			wp_enqueue_style( 'bootstrap', plugin_dir_url( __FILE__ ) . 'includes/bootstrap/front/css/bootstrap.min.css', false, '3.3.5' );
-			wp_enqueue_style( 'olla_bootstrap', plugin_dir_url( __FILE__ ) . 'includes/css/fusion-bootstrap.css', 'bootstrap', '1.3.0' );
+			wp_enqueue_style( 'olla_bootstrap', plugin_dir_url( __FILE__ ) . 'includes/css/olla-bootstrap.css', 'bootstrap', '1.3.0' );
 		}
 		//modernizr
 		wp_enqueue_script( 'modernizr', plugin_dir_url( __FILE__ ) . 'includes/js/modernizr-3.3.1-respond-1.4.2.min.js', false, '3.3.1');
 		//imagesLoaded
 		wp_enqueue_script('images_loaded', plugin_dir_url( __FILE__ ) .'includes/utilities/imagesloaded/imagesloaded.pkgd.min.js', array('jquery'), '3.1.8', true);
 		//plugin
-		wp_enqueue_script( 'olla_core', plugin_dir_url( __FILE__ ) . 'includes/js/fusion-core.js', array('jquery','modernizr','images_loaded'), '1.3.0', true );
-		wp_enqueue_style( 'olla_core', plugin_dir_url( __FILE__ ) . 'includes/css/fusion-core.css', false, '1.3.0' );
+		wp_enqueue_script( 'olla_core', plugin_dir_url( __FILE__ ) . 'includes/js/olla-core.js', array('jquery','modernizr','images_loaded'), '1.3.0', true );
+		wp_enqueue_style( 'olla_core', plugin_dir_url( __FILE__ ) . 'includes/css/olla-core.css', false, '1.3.0' );
 
 		//setup front end script for use with AJAX
 		wp_localize_script( 'olla_core', 'ollaAjax', array(
@@ -286,12 +286,12 @@ class OllaCore	{
 				'pluginurl' =>  plugin_dir_url( __FILE__ )
 			)
 		);
-		//fusion core query
-		wp_register_script( 'olla_core_query', plugin_dir_url( __FILE__ ) . 'includes/js/fusion-core-query.js', array('jquery'), '1.3.0', true );
+		//olla core query
+		wp_register_script( 'olla_core_query', plugin_dir_url( __FILE__ ) . 'includes/js/olla-core-query.js', array('jquery'), '1.3.0', true );
 		wp_localize_script( 'olla_core_query', 'ollaQuery', array(
 				'ajaxurl' => admin_url( 'admin-ajax.php' ),
 				'ollaQueryNonce' => wp_create_nonce('olla-query'),
-				'ollaQueryError' => __('Oops, something went wrong with your query. Please reload the page and try again.','fusion'),
+				'ollaQueryError' => __('Oops, something went wrong with your query. Please reload the page and try again.','olla'),
 			)
 		);
 	}
@@ -323,19 +323,19 @@ class OllaCore	{
 		$olla_param_sections = array(
 			array(
 				'id' => 'general',
-				'name' => __('General', 'fusion')
+				'name' => __('General', 'olla')
 			),
 			array(
 				'id' => 'advanced',
-				'name' => __('Advanced', 'fusion')
+				'name' => __('Advanced', 'olla')
 			),
 			array(
 				'id' => 'style',
-				'name' => __('Style', 'fusion')
+				'name' => __('Style', 'olla')
 			),
 			array(
 				'id' => 'animation',
-				'name' => __('Animation', 'fusion')
+				'name' => __('Animation', 'olla')
 			)
 		);
 		$olla_param_sections = apply_filters('olla_param_sections', $olla_param_sections);
@@ -355,15 +355,15 @@ class OllaCore	{
 				array(
 					'type' => 'box',
 					'param_name' => 'margin',
-					'label' => __('Margins', 'fusion'),
-					'help' => __('e.g. 15px', 'fusion'),
+					'label' => __('Margins', 'olla'),
+					'help' => __('e.g. 15px', 'olla'),
 					'section' => 'style'
 				),
 				array(
 					'type' => 'box',
 					'param_name' => 'margin_xs',
-					'label' => __('Mobile Margins', 'fusion'),
-					'help' => __('e.g. 15px', 'fusion'),
+					'label' => __('Mobile Margins', 'olla'),
+					'help' => __('e.g. 15px', 'olla'),
 					'section' => 'style',
 					'dependency' => array(
 						'param_name' => 'margin_xs_custom',
@@ -373,21 +373,21 @@ class OllaCore	{
 				array(
 					'type' => 'checkbox',
 					'param_name' => 'margin_xs_custom',
-					'label' => __('Customize Mobile Margins', 'fusion'),
+					'label' => __('Customize Mobile Margins', 'olla'),
 					'section' => 'style'
 				),
 				array(
 					'type' => 'box',
 					'param_name' => 'padding',
-					'label' => __('Padding', 'fusion'),
-					'help' => __('e.g. 15px', 'fusion'),
+					'label' => __('Padding', 'olla'),
+					'help' => __('e.g. 15px', 'olla'),
 					'section' => 'style'
 				),
 				array(
 					'type' => 'box',
 					'param_name' => 'padding_xs',
-					'label' => __('Mobile Padding', 'fusion'),
-					'help' => __('e.g. 15px', 'fusion'),
+					'label' => __('Mobile Padding', 'olla'),
+					'help' => __('e.g. 15px', 'olla'),
 					'section' => 'style',
 					'dependency' => array(
 						'param_name' => 'padding_xs_custom',
@@ -397,76 +397,76 @@ class OllaCore	{
 				array(
 					'type' => 'checkbox',
 					'param_name' => 'padding_xs_custom',
-					'label' => __('Customize Mobile Padding', 'fusion'),
+					'label' => __('Customize Mobile Padding', 'olla'),
 					'section' => 'style'
 				),
 				array(
 					'type' => 'select',
 					'options' => array(
-						'' => __('Choose text alignment.', 'fusion'),
-						'left' => __('Left', 'fusion'),
-						'center' => __('Center', 'fusion'),
-						'right' => __('Right', 'fusion')
+						'' => __('Choose text alignment.', 'olla'),
+						'left' => __('Left', 'olla'),
+						'center' => __('Center', 'olla'),
+						'right' => __('Right', 'olla')
 					),
 					'param_name' => 'text_align',
-					'label' => __('Text Align', 'fusion'),
+					'label' => __('Text Align', 'olla'),
 					'section' => 'style'
 				),
 				array(
 					'type' => 'select',
 					'options' => array(
-						'' => __('Choose text alignment.', 'fusion'),
-						'left' => __('Left', 'fusion'),
-						'center' => __('Center', 'fusion'),
-						'right' => __('Right', 'fusion')
+						'' => __('Choose text alignment.', 'olla'),
+						'left' => __('Left', 'olla'),
+						'center' => __('Center', 'olla'),
+						'right' => __('Right', 'olla')
 					),
 					'param_name' => 'text_align_xs',
-					'label' => __('Mobile Text Align', 'fusion'),
+					'label' => __('Mobile Text Align', 'olla'),
 					'section' => 'style'
 				),
 				array(
 					'type' => 'text',
 					'param_name' => 'font_size',
-					'label' => __('Font Size', 'fusion'),
-					'help' => __('e.g. 15px', 'fusion'),
+					'label' => __('Font Size', 'olla'),
+					'help' => __('e.g. 15px', 'olla'),
 					'section' => 'style'
 				),
 				array(
 					'type' => 'colorpicker',
 					'param_name' => 'color',
-					'label' => __('Text Color', 'fusion'),
+					'label' => __('Text Color', 'olla'),
 					'section' => 'style'
 				),
 				array(
 					'type' => 'colorpicker',
 					'param_name' => 'background_color',
-					'label' => __('Background Color', 'fusion'),
+					'label' => __('Background Color', 'olla'),
 					'section' => 'style'
 				),
 				array(
 					'type' => 'text',
 					'param_name' => 'background_color_opacity',
-					'label' => __('Background Color Opacity', 'fusion'),
-					'help' => __('Value between 0 and 1.', 'fusion'),
+					'label' => __('Background Color Opacity', 'olla'),
+					'help' => __('Value between 0 and 1.', 'olla'),
 					'section' => 'style'
 				),
 				array(
 					'type' => 'checkbox',
 					'param_name' => 'hidden_xs',
-					'label' => __('Hide on Mobile', 'fusion'),
+					'label' => __('Hide on Mobile', 'olla'),
 					'section' => 'style'
 				),
 				array(
 					'type' => 'checkbox',
 					'param_name' => 'visible_xs',
-					'label' => __('Hide on Desktop and Tablet', 'fusion'),
+					'label' => __('Hide on Desktop and Tablet', 'olla'),
 					'section' => 'style'
 				),
 				array(
 					'type' => 'text',
 					'param_name' => 'user_classes',
-					'label' => __('CSS Classes', 'fusion'),
-					'help' => __('Separate multiple classes with a space.', 'fusion'),
+					'label' => __('CSS Classes', 'olla'),
+					'help' => __('Separate multiple classes with a space.', 'olla'),
 					'section' => 'style'
 				)
 			);
@@ -613,21 +613,21 @@ class OllaCore	{
 			$output .= '<div class="row-container clearfix">';
 				$output .= '<div class="row-header">';
 					$output .= '<div class="row-controls">';
-						$output .= '<span class="row-controls-toggle" title="'. __('Row Options', 'fusion') .'"><i class="material-icons md-18">&#xE5D3;</i></span>';
+						$output .= '<span class="row-controls-toggle" title="'. __('Row Options', 'olla') .'"><i class="material-icons md-18">&#xE5D3;</i></span>';
 						$output .= '<div class="row-controls-dropdown collapsed">';
-							$output .= '<a href="#" class="edit-row">'. __('Edit', 'fusion') .'</a>';
-							$output .= '<a href="#" class="duplicate-row">'. __('Duplicate', 'fusion') .'</a>';
+							$output .= '<a href="#" class="edit-row">'. __('Edit', 'olla') .'</a>';
+							$output .= '<a href="#" class="duplicate-row">'. __('Duplicate', 'olla') .'</a>';
 							$output .= '<hr>';
-							$output .= '<a href="#" class="move-row" data-move="up">'. __('Move Up', 'fusion') .'</a>';
-							$output .= '<a href="#" class="move-row" data-move="down">'. __('Move Down', 'fusion') .'</a>';
-							$output .= '<a href="#" class="move-row" data-move="top">'. __('Move to Top', 'fusion') .'</a>';
-							$output .= '<a href="#" class="move-row" data-move="bottom">'. __('Move to Bottom', 'fusion') .'</a>';
+							$output .= '<a href="#" class="move-row" data-move="up">'. __('Move Up', 'olla') .'</a>';
+							$output .= '<a href="#" class="move-row" data-move="down">'. __('Move Down', 'olla') .'</a>';
+							$output .= '<a href="#" class="move-row" data-move="top">'. __('Move to Top', 'olla') .'</a>';
+							$output .= '<a href="#" class="move-row" data-move="bottom">'. __('Move to Bottom', 'olla') .'</a>';
 							$output .= '<hr>';
-							$output .= '<a href="#" class="delete-row">'. __('Delete', 'fusion') .'</a>';
+							$output .= '<a href="#" class="delete-row">'. __('Delete', 'olla') .'</a>';
 						$output .= '</div>';
 						$output .= '<a href="#" class="control-icon edit-row" title="'. __('Edit Row', 'function') .'"><i class="material-icons md-18">&#xE3C9;</i></a>';
 					$output .= '</div>';
-					$output .= '<a href="#" class="olla-add-row" title="'. __('Add Row', 'fusion') .'"><i class="material-icons md-18">&#xE147;</i></a>';
+					$output .= '<a href="#" class="olla-add-row" title="'. __('Add Row', 'olla') .'"><i class="material-icons md-18">&#xE147;</i></a>';
 				$output .= '</div>';
 				$output .= '<div class="row-wrapper">';
 					$output .= '<div class="row"'. $shortcode_atts_data .'>'. do_shortcode($content) .'</div>';
@@ -787,19 +787,19 @@ class OllaCore	{
 				$output .= '<div class="column-container clearfix">';
 					$output .= '<div class="column-header">';
 						$output .= '<div class="column-controls">';
-							$output .= '<span class="column-controls-toggle" title="'. __('Column Options', 'fusion') .'"><i class="material-icons md-18">&#xE5D3;</i></span>';
+							$output .= '<span class="column-controls-toggle" title="'. __('Column Options', 'olla') .'"><i class="material-icons md-18">&#xE5D3;</i></span>';
 							$output .= '<div class="column-controls-dropdown collapsed">';
-								$output .= '<a href="#" class="edit-col">'. __('Edit', 'fusion') .'</a>';
-								$output .= '<a href="#" class="delete-col">'. __('Delete', 'fusion') .'</a>';
+								$output .= '<a href="#" class="edit-col">'. __('Edit', 'olla') .'</a>';
+								$output .= '<a href="#" class="delete-col">'. __('Delete', 'olla') .'</a>';
 							$output .= '</div>';
-							$output .= '<a href="#" class="control-icon edit-col" title="'. __('Edit Column', 'fusion') .'"><i class="material-icons md-18">&#xE3C9;</i></a>';
+							$output .= '<a href="#" class="control-icon edit-col" title="'. __('Edit Column', 'olla') .'"><i class="material-icons md-18">&#xE3C9;</i></a>';
 						$output .= '</div>';
 						$output .= '<h3 class="column-title"><span class="column-width">'. esc_attr($width) .'</span> / 12</h3>';
 					$output .= '</div>';
 					$output .= '<div class="column-wrapper">';
 						$output .= do_shortcode($content);
 					$output .= '</div>';
-					$output .= '<a href="#" class="olla-add-element" data-container="column" title="'. __('Add Element', 'fusion') .'"><i class="material-icons md-18">&#xE147;</i></a>';
+					$output .= '<a href="#" class="olla-add-element" data-container="column" title="'. __('Add Element', 'olla') .'"><i class="material-icons md-18">&#xE147;</i></a>';
 				$output .= '</div>';
 			$output .= '</div>';
 		} else {
@@ -877,14 +877,14 @@ class OllaCore	{
 		$options = get_option('olla_options');
 		$olla_post_types = !empty($options['olla_post_types']) ? $options['olla_post_types'] : '';
 		if (!empty($olla_post_types) && is_array($olla_post_types) && in_array($post->post_type, $olla_post_types)) {
-			echo '<a href="#" class="button button-primary olla-toggle-editor"><div class="olla-toggle-editor-default">'. __('Switch To Default Editor', 'fusion') .'</div><div class="olla-toggle-editor-fusion">'. __('Switch To Fusion Editor', 'fusion') .'</div></a>';
+			echo '<a href="#" class="button button-primary olla-toggle-editor"><div class="olla-toggle-editor-default">'. __('Wordpress Editor', 'olla') .'</div><div class="olla-toggle-editor-olla">'. __('Switch To Fusion Editor', 'olla') .'</div></a>';
 			echo '<div class="olla-editor wp-editor-container">';
 				echo '<div class="olla-main-controls">';
 					if ($post->post_type != 'template') {
-						echo '<a href="#" class="button olla-save-template">'. __('Save Template', 'fusion') .'</a>';
+						echo '<a href="#" class="button olla-save-template">'. __('Save Template', 'olla') .'</a>';
 					}
-					echo '<a href="#" class="button olla-load-template" style="margin-left:5px;">'. __('Load Template', 'fusion') .'</a>';
-					//echo '<a href="#" class="button olla-toggle-previews" style="margin-left:5px;">'. __('Hide Element Previews', 'fusion') .'</a>';
+					echo '<a href="#" class="button olla-load-template" style="margin-left:5px;">'. __('Load Template', 'olla') .'</a>';
+					//echo '<a href="#" class="button olla-toggle-previews" style="margin-left:5px;">'. __('Hide Element Previews', 'olla') .'</a>';
 				echo '</div>';
 				echo '<div class="olla-interface-container">';
 					//output grid content
@@ -899,7 +899,7 @@ class OllaCore	{
 	/**
 	 * Add Screen Options
 	 *
-	 * Add screen options for configuring fusion on a per-user basis
+	 * Add screen options for configuring olla on a per-user basis
 	 *
 	 * @since 1.0.0
 	 */
@@ -914,9 +914,9 @@ class OllaCore	{
 	}
 
 	public function filter_screen_settings($screen_settings, $screen_object) {
-		$expand = '<fieldset class="editor-expand"><legend>' . __('Fusion settings', 'fusion') . '</legend><label for="olla_disable_tooltips">';
+		$expand = '<fieldset class="editor-expand"><legend>' . __('Fusion settings', 'olla') . '</legend><label for="olla_disable_tooltips">';
 		$expand .= '<input type="checkbox" id="olla_disable_tooltips"' . checked( get_user_setting( 'olla_disable_tooltips', false ), 'on', false ) . ' />';
-		$expand .= __('Disable Fusion tooltips.', 'fusion') . '</label></fieldset>';
+		$expand .= __('Disable Fusion tooltips.', 'olla') . '</label></fieldset>';
 		$screen_settings .= $expand;
 		return $screen_settings;
 	}
@@ -958,19 +958,19 @@ class OllaCore	{
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h4 class="modal-title" id="ollaModalLabel"><?php _e('Add Element', 'fusion'); ?></h4>
-						<a href="#" class="close" data-dismiss="modal" aria-label="<?php _e('Close', 'fusion'); ?>"><span aria-hidden="true"><i class="material-icons">&#xE5CD;</i></span></a>
+						<h4 class="modal-title" id="ollaModalLabel"><?php _e('Add Element', 'olla'); ?></h4>
+						<a href="#" class="close" data-dismiss="modal" aria-label="<?php _e('Close', 'olla'); ?>"><span aria-hidden="true"><i class="material-icons">&#xE5CD;</i></span></a>
 					</div>
 					<div class="modal-body">
 						<div class="element-grid">
 							<?php if ($nesting_level === 1) : ?>
 								<div class="element-grid-item">
-									<a href="#" class="element-item" data-element-type="row"><i class="material-icons">reorder</i> <span class="element-name"><?php _e('Row', 'fusion'); ?></span></a>
+									<a href="#" class="element-item" data-element-type="row"><i class="material-icons">reorder</i> <span class="element-name"><?php _e('Row', 'olla'); ?></span></a>
 								</div>
 							<?php endif; ?>
 							<?php if ($tabs_nesting_level === 0 && $nesting_level === 1) : ?>
 								<div class="element-grid-item">
-									<a href="#" class="element-item" data-element-type="tabs"><i class="material-icons">tab</i> <span class="element-name"><?php _e('Tabs', 'fusion'); ?></span></a>
+									<a href="#" class="element-item" data-element-type="tabs"><i class="material-icons">tab</i> <span class="element-name"><?php _e('Tabs', 'olla'); ?></span></a>
 								</div>
 							<?php endif; ?>
 							<?php if (!empty($olla_elements)) {
@@ -984,7 +984,7 @@ class OllaCore	{
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="button" data-dismiss="modal"><?php _e('Close', 'fusion'); ?></button>
+						<button type="button" class="button" data-dismiss="modal"><?php _e('Close', 'olla'); ?></button>
 					</div>
 				</div>
 			</div>
@@ -1017,14 +1017,14 @@ class OllaCore	{
 		}
 
     $row_function_options = array(
-      '' => __('Choose row function.', 'fusion'),
-      'collapse' => __('Collapse', 'fusion')
+      '' => __('Choose row function.', 'olla'),
+      'collapse' => __('Collapse', 'olla')
     );
 		$row_function_options = apply_filters('olla_row_function_options', $row_function_options);
 
 		$row_style_options = array(
-			'light' => __('Light', 'fusion'),
-			'dark' => __('Dark', 'fusion')
+			'light' => __('Light', 'olla'),
+			'dark' => __('Dark', 'olla')
 		);
 		$row_style_options = apply_filters('olla_row_style_options', $row_style_options);
 
@@ -1033,80 +1033,80 @@ class OllaCore	{
 			array(
 				'type' => 'radio',
 				'options' => array(
-					'container' => __('Container', 'fusion'),
-					'full-width' => __('Full Width','fusion')
+					'container' => __('Container', 'olla'),
+					'full-width' => __('Full Width','olla')
 				),
 				'param_name' => 'row_width',
-				'label' => __('Width', 'fusion'),
-				'help' => __('Choose whether Row is wrapped in container (default) or is full width.', 'fusion')
+				'label' => __('Width', 'olla'),
+				'help' => __('Choose whether Row is wrapped in container (default) or is full width.', 'olla')
 			),
 			array(
 				'type' => 'checkbox',
 				'param_name' => 'seamless',
-				'label' => __('Seamless', 'fusion'),
-				'help' => __('Check to enable seamless Columns with no left/right margins for Row.', 'fusion')
+				'label' => __('Seamless', 'olla'),
+				'help' => __('Check to enable seamless Columns with no left/right margins for Row.', 'olla')
 			),
 			array(
 				'type' => 'select',
 				'options' => $row_function_options,
 				'param_name' => 'row_function',
-				'label' => __('Function', 'fusion'),
-				'help' => __('"Collapse" will hide row and allow it to be triggered and revealed by a button.', 'fusion'),
+				'label' => __('Function', 'olla'),
+				'help' => __('"Collapse" will hide row and allow it to be triggered and revealed by a button.', 'olla'),
 				'section' => 'advanced'
 			),array(
 				'type' => 'text',
 				'param_name' => 'id',
-				'label' => __('ID', 'fusion'),
-				'help' => __('Input row ID. Rows can be targeted by their ID for triggering collapsed Rows or anchor links.', 'fusion'),
+				'label' => __('ID', 'olla'),
+				'help' => __('Input row ID. Rows can be targeted by their ID for triggering collapsed Rows or anchor links.', 'olla'),
 				'section' => 'advanced'
 			),
 			array(
 				'type' => 'select',
 				'options' => $row_style_options,
 				'param_name' => 'row_style',
-				'label' => __('Theme', 'fusion'),
-				'help' => __('Choose Row theme. Light will inherit globally set text color. Dark will adopt text color set within this Row for headlines and links.', 'fusion'),
+				'label' => __('Theme', 'olla'),
+				'help' => __('Choose Row theme. Light will inherit globally set text color. Dark will adopt text color set within this Row for headlines and links.', 'olla'),
 				'section' => 'style'
 			),
 			array(
 				'type' => 'image',
 				'param_name' => 'background_image',
-				'label' => __('Background Image', 'fusion'),
+				'label' => __('Background Image', 'olla'),
 				'section' => 'style'
 			),
 			array(
 				'type' => 'select',
 				'options' => array(
-					'repeat' => __('Repeat','fusion'),
-					'no-repeat' => __('No Repeat', 'fusion')
+					'repeat' => __('Repeat','olla'),
+					'no-repeat' => __('No Repeat', 'olla')
 				),
 				'param_name' => 'background_repeat',
-				'label' => __('Background Image Repeat', 'fusion'),
+				'label' => __('Background Image Repeat', 'olla'),
 				'section' => 'style'
 			),
 			array(
 				'type' => 'select',
 				'options' => array(
-					'left top' => __('Top Left', 'fusion'),
-					'center top' => __('Top Center', 'fusion'),
-					'right top' => __('Top Right', 'fusion'),
-					'left center' => __('Center Left', 'fusion'),
-					'center center' => __('Center Center', 'fusion'),
-					'right center' => __('Center Right', 'fusion'),
-					'left bottom' => __('Bottom Left', 'fusion'),
-					'center bottom' => __('Bottom Center', 'fusion'),
-					'right bottom' => __('Bottom Right', 'fusion'),
-					'custom' => __('Custom', 'fusion')
+					'left top' => __('Top Left', 'olla'),
+					'center top' => __('Top Center', 'olla'),
+					'right top' => __('Top Right', 'olla'),
+					'left center' => __('Center Left', 'olla'),
+					'center center' => __('Center Center', 'olla'),
+					'right center' => __('Center Right', 'olla'),
+					'left bottom' => __('Bottom Left', 'olla'),
+					'center bottom' => __('Bottom Center', 'olla'),
+					'right bottom' => __('Bottom Right', 'olla'),
+					'custom' => __('Custom', 'olla')
 				),
 				'param_name' => 'background_position',
-				'label' => __('Background Image Position', 'fusion'),
+				'label' => __('Background Image Position', 'olla'),
 				'section' => 'style'
 			),
 			array(
 				'type' => 'text',
 				'param_name' => 'background_position_custom',
-				'label' => __('Custom Background Image Position', 'fusion'),
-				'help' => __('Input background image x-y position (e.g. 20px 20px).', 'fusion'),
+				'label' => __('Custom Background Image Position', 'olla'),
+				'help' => __('Input background image x-y position (e.g. 20px 20px).', 'olla'),
 				'section' => 'style',
 				'dependency' => array(
 					'param_name' => 'background_position',
@@ -1116,37 +1116,37 @@ class OllaCore	{
 			array(
 				'type' => 'select',
 				'options' => array(
-					'scroll' => __('Scroll', 'fusion'),
-					'fixed' => __('Fixed', 'fusion')
+					'scroll' => __('Scroll', 'olla'),
+					'fixed' => __('Fixed', 'olla')
 				),
 				'param_name' => 'background_attachment',
-				'label' => __('Background Image Attachment', 'fusion'),
+				'label' => __('Background Image Attachment', 'olla'),
 				'section' => 'style'
 			),
 			array(
 				'type' => 'select',
 				'options' => array(
-					'auto' => __('Auto', 'fusion'),
-					'cover' => __('Cover', 'fusion'),
-					'contain' => __('Contain', 'fusion')
+					'auto' => __('Auto', 'olla'),
+					'cover' => __('Cover', 'olla'),
+					'contain' => __('Contain', 'olla')
 				),
 				'param_name' => 'background_size',
-				'label' => __('Background Image Size', 'fusion'),
+				'label' => __('Background Image Size', 'olla'),
 				'section' => 'style'
 			),
 			array(
 				'type' => 'select',
 				'options' => array(
-					'show' => __('Show','fusion'),
-					'hide' => __('Hide', 'fusion')
+					'show' => __('Show','olla'),
+					'hide' => __('Hide', 'olla')
 				),
 				'param_name' => 'background_image_xs',
-				'label' => __('Background Image Mobile', 'fusion'),
+				'label' => __('Background Image Mobile', 'olla'),
 				'section' => 'style'
 			),
 			array(
 				'type' => 'note',
-				'help' => __('Set left and right margins or padding on Columns.', 'fusion'),
+				'help' => __('Set left and right margins or padding on Columns.', 'olla'),
 				'section' => 'style'
 			)
 		);
@@ -1167,8 +1167,8 @@ class OllaCore	{
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
 					<div class="modal-header has-tabs">
-						<h4 class="modal-title" id="ollaModalLabel"><?php _e('Row', 'fusion'); ?></h4>
-						<a href="#" class="close" data-dismiss="modal" aria-label="<?php _e('Close', 'fusion'); ?>"><span aria-hidden="true"><i class="material-icons">&#xE5CD;</i></span></a>
+						<h4 class="modal-title" id="ollaModalLabel"><?php _e('Row', 'olla'); ?></h4>
+						<a href="#" class="close" data-dismiss="modal" aria-label="<?php _e('Close', 'olla'); ?>"><span aria-hidden="true"><i class="material-icons">&#xE5CD;</i></span></a>
 						<?php
 						echo '<ul class="nav nav-tabs" role="tablist">';
 							$active_tab = true;
@@ -1247,8 +1247,8 @@ class OllaCore	{
 						</form>
 					</div>
 					<div class="modal-footer">
-						<span class="save-notice"><?php _e('Changes will be saved on close.', 'fusion'); ?></span>
-						<button type="button" class="button" data-dismiss="modal"><?php _e('Close', 'fusion'); ?></button>
+						<span class="save-notice"><?php _e('Changes will be saved on close.', 'olla'); ?></span>
+						<button type="button" class="button" data-dismiss="modal"><?php _e('Close', 'olla'); ?></button>
 					</div>
 				</div>
 			</div>
@@ -1280,8 +1280,8 @@ class OllaCore	{
 			}
 		}
 		$column_style_options = array(
-			'light' => __('Light', 'fusion'),
-			'dark' => __('Dark', 'fusion')
+			'light' => __('Light', 'olla'),
+			'dark' => __('Dark', 'olla')
 		);
 		$column_style_options = apply_filters('olla_column_style_options', $column_style_options);
 		//map column parameters
@@ -1290,8 +1290,8 @@ class OllaCore	{
 				'type' => 'select',
 				'options' => $column_style_options,
 				'param_name' => 'column_style',
-				'label' => __('Theme', 'fusion'),
-				'help' => __('Choose Column theme. Light will inherit globally set text color. Dark will adopt text color set within this Column for headlines and links.', 'fusion'),
+				'label' => __('Theme', 'olla'),
+				'help' => __('Choose Column theme. Light will inherit globally set text color. Dark will adopt text color set within this Column for headlines and links.', 'olla'),
 				'section' => 'style'
 			)
 		);
@@ -1312,8 +1312,8 @@ class OllaCore	{
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
 					<div class="modal-header has-tabs">
-						<h4 class="modal-title" id="ollaModalLabel"><?php _e('Column', 'fusion'); ?></h4>
-						<a href="#" class="close" data-dismiss="modal" aria-label="<?php _e('Close', 'fusion'); ?>"><span aria-hidden="true"><i class="material-icons">&#xE5CD;</i></span></a>
+						<h4 class="modal-title" id="ollaModalLabel"><?php _e('Column', 'olla'); ?></h4>
+						<a href="#" class="close" data-dismiss="modal" aria-label="<?php _e('Close', 'olla'); ?>"><span aria-hidden="true"><i class="material-icons">&#xE5CD;</i></span></a>
 						<?php
 						echo '<ul class="nav nav-tabs" role="tablist">';
 							$active_tab = true;
@@ -1392,8 +1392,8 @@ class OllaCore	{
 						</form>
 					</div>
 					<div class="modal-footer">
-						<span class="save-notice"><?php _e('Changes will be saved on close.', 'fusion'); ?></span>
-						<button type="button" class="button" data-dismiss="modal"><?php _e('Close', 'fusion'); ?></button>
+						<span class="save-notice"><?php _e('Changes will be saved on close.', 'olla'); ?></span>
+						<button type="button" class="button" data-dismiss="modal"><?php _e('Close', 'olla'); ?></button>
 					</div>
 				</div>
 			</div>
@@ -1473,7 +1473,7 @@ class OllaCore	{
 			case 'select_post':
 				$input .= '<label for="olla_'. esc_attr($param['param_name']) .'">'. esc_html($param['label']) .'</label>';
 				$input .= !empty($param['help']) ? '<p class="help-block">'. esc_html($param['help']) .'</p>' : '';
-				$input .= '<select class="form-control element-input select2-posts-element'. (!empty($param['nested']) ? ' nested' : '') .'" name="'. esc_attr($param['param_name']) .'" style="width:100%;" data-post-type="'. (!empty($param['post_type']) ? esc_attr(json_encode($param['post_type'])) : 'post' ) .'" data-placeholder="'. __('Choose an Option.', 'fusion') .'">';
+				$input .= '<select class="form-control element-input select2-posts-element'. (!empty($param['nested']) ? ' nested' : '') .'" name="'. esc_attr($param['param_name']) .'" style="width:100%;" data-post-type="'. (!empty($param['post_type']) ? esc_attr(json_encode($param['post_type'])) : 'post' ) .'" data-placeholder="'. __('Choose an Option.', 'olla') .'">';
 					$input .= '<option></option>';
 					if (!empty($param_value)) {
 						$input .= '<option value="'. $param_value .'" selected>'. get_the_title($param_value) .'</option>';
@@ -1506,11 +1506,11 @@ class OllaCore	{
 			    	$image_attrs = wp_get_attachment_image_src($param_value, 'medium');
 			    	$input .= '<img src="'. esc_url($image_attrs[0]) .'" class="image-field-preview" alt="">';
 				}
-				$button_verb_empty = __('Add', 'fusion');
-				$button_verb_isset = __('Edit', 'fusion');
+				$button_verb_empty = __('Add', 'olla');
+				$button_verb_isset = __('Edit', 'olla');
 				$button_verb = !empty($param_value) ? $button_verb_isset : $button_verb_empty;
-				$input .= '<a href="#" class="olla_upload_image button-secondary" data-empty="'. esc_attr($button_verb_empty) .'" data-isset="'. esc_attr($button_verb_isset) .'"><span class="button-verb">'. $button_verb .'</span> '. __('Image', 'fusion') .'</a>';
-				$input .= '<a href="#" class="olla-remove-image button-secondary'. (empty($param_value) ? ' deactivated' : '') .'">'. __('Remove Image', 'fusion') .'</a>';
+				$input .= '<a href="#" class="olla_upload_image button-secondary" data-empty="'. esc_attr($button_verb_empty) .'" data-isset="'. esc_attr($button_verb_isset) .'"><span class="button-verb">'. $button_verb .'</span> '. __('Image', 'olla') .'</a>';
+				$input .= '<a href="#" class="olla-remove-image button-secondary'. (empty($param_value) ? ' deactivated' : '') .'">'. __('Remove Image', 'olla') .'</a>';
 				break;
 			case 'video':
 				$input .= '<label for="olla_'. esc_attr($param['param_name']) .'">'. esc_html($param['label']) .'</label>';
@@ -1520,11 +1520,11 @@ class OllaCore	{
 			    	$image_attrs = wp_get_attachment_image_src($param_value, 'thumbnail', true);
 			    	$input .= '<img src="'. esc_url($image_attrs[0]) .'" class="video-field-preview" alt="">';
 				}
-				$button_verb_empty = __('Add', 'fusion');
-				$button_verb_isset = __('Edit', 'fusion');
+				$button_verb_empty = __('Add', 'olla');
+				$button_verb_isset = __('Edit', 'olla');
 				$button_verb = !empty($param_value) ? $button_verb_isset : $button_verb_empty;
-				$input .= '<a href="#" class="olla_upload_video button-secondary" data-empty="'. esc_attr($button_verb_empty) .'" data-isset="'. esc_attr($button_verb_isset) .'"><span class="button-verb">'. $button_verb .'</span> '. __('Video', 'fusion') .'</a>';
-				$input .= '<a href="#" class="olla-remove-video button-secondary'. (empty($param_value) ? ' deactivated' : '') .'">'. __('Remove Video', 'fusion') .'</a>';
+				$input .= '<a href="#" class="olla_upload_video button-secondary" data-empty="'. esc_attr($button_verb_empty) .'" data-isset="'. esc_attr($button_verb_isset) .'"><span class="button-verb">'. $button_verb .'</span> '. __('Video', 'olla') .'</a>';
+				$input .= '<a href="#" class="olla-remove-video button-secondary'. (empty($param_value) ? ' deactivated' : '') .'">'. __('Remove Video', 'olla') .'</a>';
 				break;
 			case 'button':
 				if (!empty($param_value)) {
@@ -1545,66 +1545,66 @@ class OllaCore	{
 					if (!empty($param_value)) {
 						switch($saved_button_type) {
 							case 'external':
-								$input .= '<p>'. __('Type', 'fusion') .': <strong>'. __('External Link', 'fusion') .'</strong></p>';
-								$input .= !empty($saved_button_link) ? '<p>'. __('Links to', 'fusion') .': <strong>'. esc_html($saved_button_link) .'</strong></p>' : '';
-								$input .= !empty($saved_button_label) ? '<p>'. __('Label', 'fusion') .': <strong>'. esc_html($saved_button_label) .'</strong></p>' : '';
+								$input .= '<p>'. __('Type', 'olla') .': <strong>'. __('External Link', 'olla') .'</strong></p>';
+								$input .= !empty($saved_button_link) ? '<p>'. __('Links to', 'olla') .': <strong>'. esc_html($saved_button_link) .'</strong></p>' : '';
+								$input .= !empty($saved_button_label) ? '<p>'. __('Label', 'olla') .': <strong>'. esc_html($saved_button_label) .'</strong></p>' : '';
 								switch($saved_button_target) {
 									case '_blank':
-										$input .= '<p>'. __('Opens in', 'fusion') .': <strong>'. __('New Window / Tab', 'fusion') .'</strong></p>';
+										$input .= '<p>'. __('Opens in', 'olla') .': <strong>'. __('New Window / Tab', 'olla') .'</strong></p>';
 										break;
 									case '_parent':
-										$input .= '<p>'. __('Opens in', 'fusion') .': <strong>'. __('Parent Frame', 'fusion') .'</strong></p>';
+										$input .= '<p>'. __('Opens in', 'olla') .': <strong>'. __('Parent Frame', 'olla') .'</strong></p>';
 										break;
 									case '_top':
-										$input .= '<p>'. __('Opens in', 'fusion') .': <strong>'. __('Full Body of the Window', 'fusion') .'</strong></p>';
+										$input .= '<p>'. __('Opens in', 'olla') .': <strong>'. __('Full Body of the Window', 'olla') .'</strong></p>';
 										break;
 									default:
-										$input .= '<p>'. __('Opens in', 'fusion') .': <strong>'. __('Current Window / Tab', 'fusion') .'</strong></p>';
+										$input .= '<p>'. __('Opens in', 'olla') .': <strong>'. __('Current Window / Tab', 'olla') .'</strong></p>';
 								}
 								break;
 							case 'internal':
-								$input .= '<p>'. __('Type', 'fusion') .': <strong>'. __('Internal Link', 'fusion') .'</strong></p>';
-								$input .= !empty($saved_button_attached_id) ? '<p>'. __('Links to', 'fusion') .': <strong>'. get_the_title($saved_button_attached_id) .'</strong></p>' : '';
-								$input .= !empty($saved_button_label) ? '<p>'. __('Label', 'fusion') .': <strong>'. esc_html($saved_button_label) .'</strong></p>' : '';
+								$input .= '<p>'. __('Type', 'olla') .': <strong>'. __('Internal Link', 'olla') .'</strong></p>';
+								$input .= !empty($saved_button_attached_id) ? '<p>'. __('Links to', 'olla') .': <strong>'. get_the_title($saved_button_attached_id) .'</strong></p>' : '';
+								$input .= !empty($saved_button_label) ? '<p>'. __('Label', 'olla') .': <strong>'. esc_html($saved_button_label) .'</strong></p>' : '';
 								switch($saved_button_target) {
 									case '_blank':
-										$input .= '<p>'. __('Opens in', 'fusion') .': <strong>'. __('New Window / Tab', 'fusion') .'</strong></p>';
+										$input .= '<p>'. __('Opens in', 'olla') .': <strong>'. __('New Window / Tab', 'olla') .'</strong></p>';
 										break;
 									case '_parent':
-										$input .= '<p>'. __('Opens in', 'fusion') .': <strong>'. __('Parent Frame', 'fusion') .'</strong></p>';
+										$input .= '<p>'. __('Opens in', 'olla') .': <strong>'. __('Parent Frame', 'olla') .'</strong></p>';
 										break;
 									case '_top':
-										$input .= '<p>'. __('Opens in', 'fusion') .': <strong>'. __('Full Body of the Window', 'fusion') .'</strong></p>';
+										$input .= '<p>'. __('Opens in', 'olla') .': <strong>'. __('Full Body of the Window', 'olla') .'</strong></p>';
 										break;
 									default:
-										$input .= '<p>'. __('Opens in', 'fusion') .': <strong>'. __('Current Window / Tab', 'fusion') .'</strong></p>';
+										$input .= '<p>'. __('Opens in', 'olla') .': <strong>'. __('Current Window / Tab', 'olla') .'</strong></p>';
 								}
 								break;
 							case 'collapse':
 								if (!empty($saved_button_component_id)) {
 									$saved_button_collapse_id = get_the_title($saved_button_component_id);
 								}
-								$input .= '<p>'. __('Type', 'fusion') .': <strong>'. __('Collapse', 'fusion') .'</strong></p>';
-								$input .= !empty($saved_button_collapse_id) ? '<p>'. __('Opens', 'fusion') .': <strong>'. esc_html($saved_button_collapse_id) .'</strong></p>' : '';
-								$input .= !empty($saved_button_collapse_label_show) ? '<p>'. __('Show Label', 'fusion') .': <strong>'. esc_html($saved_button_collapse_label_show) .'</strong></p>' : '';
-								$input .= !empty($saved_button_collapse_label_hide) ? '<p>'. __('Hide Label', 'fusion') .': <strong>'. esc_html($saved_button_collapse_label_hide) .'</strong></p>' : '';
+								$input .= '<p>'. __('Type', 'olla') .': <strong>'. __('Collapse', 'olla') .'</strong></p>';
+								$input .= !empty($saved_button_collapse_id) ? '<p>'. __('Opens', 'olla') .': <strong>'. esc_html($saved_button_collapse_id) .'</strong></p>' : '';
+								$input .= !empty($saved_button_collapse_label_show) ? '<p>'. __('Show Label', 'olla') .': <strong>'. esc_html($saved_button_collapse_label_show) .'</strong></p>' : '';
+								$input .= !empty($saved_button_collapse_label_hide) ? '<p>'. __('Hide Label', 'olla') .': <strong>'. esc_html($saved_button_collapse_label_hide) .'</strong></p>' : '';
 								break;
 							case 'modal':
 								if (!empty($saved_button_component_id)) {
 									$saved_button_modal_id = get_the_title($saved_button_component_id);
 								}
-								$input .= '<p>'. __('Type', 'fusion') .': <strong>'. __('Modal', 'fusion') .'</strong></p>';
-								$input .= !empty($saved_button_modal_id) ? '<p>'. __('Opens', 'fusion') .': <strong>'. esc_html($saved_button_modal_id) .'</strong></p>' : '';
-								$input .= !empty($saved_button_label) ? '<p>'. __('Label', 'fusion') .': <strong>'. esc_html($saved_button_label) .'</strong></p>' : '';
+								$input .= '<p>'. __('Type', 'olla') .': <strong>'. __('Modal', 'olla') .'</strong></p>';
+								$input .= !empty($saved_button_modal_id) ? '<p>'. __('Opens', 'olla') .': <strong>'. esc_html($saved_button_modal_id) .'</strong></p>' : '';
+								$input .= !empty($saved_button_label) ? '<p>'. __('Label', 'olla') .': <strong>'. esc_html($saved_button_label) .'</strong></p>' : '';
 								break;
 						}
 					}
 				$input .= '</div>';
-				$button_verb_empty = __('Add', 'fusion');
-				$button_verb_isset = __('Edit', 'fusion');
+				$button_verb_empty = __('Add', 'olla');
+				$button_verb_isset = __('Edit', 'olla');
 				$button_verb = !empty($param_value) ? $button_verb_isset : $button_verb_empty;
-				$input .= '<a href="#" class="olla-add-edit-button button-secondary" data-empty="'. esc_attr($button_verb_empty) .'" data-isset="'. esc_attr($button_verb_isset) .'"><span class="button-verb">'. $button_verb .'</span> '. __('Button', 'fusion') .'</a>';
-				$input .= '<a href="#" class="olla-remove-button button-secondary'. (empty($param_value) ? ' deactivated' : '') .'">'. __('Remove Button', 'fusion') .'</a>';
+				$input .= '<a href="#" class="olla-add-edit-button button-secondary" data-empty="'. esc_attr($button_verb_empty) .'" data-isset="'. esc_attr($button_verb_isset) .'"><span class="button-verb">'. $button_verb .'</span> '. __('Button', 'olla') .'</a>';
+				$input .= '<a href="#" class="olla-remove-button button-secondary'. (empty($param_value) ? ' deactivated' : '') .'">'. __('Remove Button', 'olla') .'</a>';
 				$input .= '<input type="hidden" class="form-control element-input button-string'. (!empty($param['nested']) ? ' nested' : '') .'" id="olla_'. esc_attr($param['param_name']) .'" name="'. esc_attr($param['param_name']) .'" value="'. esc_attr($param_value) .'">';
 				break;
 			case 'box':
@@ -1618,13 +1618,13 @@ class OllaCore	{
 				$input .= '<label>'. esc_html($param['label']) .'</label>';
 				$input .= !empty($param['help']) ? '<p class="help-block">'. esc_html($param['help']) .'</p>' : '';
 				$input .= '<div class="olla-box-form">';
-					$input .= '<label for="olla_'. esc_attr($param['param_name']) .'_top">'. __('Top', 'fusion') .'</label>';
+					$input .= '<label for="olla_'. esc_attr($param['param_name']) .'_top">'. __('Top', 'olla') .'</label>';
 					$input .= '<input type="text" class="form-control box-top" id="olla_'. esc_attr($param['param_name']) .'_top" name="'. esc_attr($param['param_name']) .'_top" value="'. (!empty($box_top) ? esc_attr($box_top) : '') .'">';
-					$input .= '<label for="olla_'. esc_attr($param['param_name']) .'_right">'. __('Right', 'fusion') .'</label>';
+					$input .= '<label for="olla_'. esc_attr($param['param_name']) .'_right">'. __('Right', 'olla') .'</label>';
 					$input .= '<input type="text" class="form-control box-right" id="olla_'. esc_attr($param['param_name']) .'_right" name="'. esc_attr($param['param_name']) .'_right" value="'. (!empty($box_right) ? esc_attr($box_right) : '') .'">';
-					$input .= '<label for="olla_'. esc_attr($param['param_name']) .'_bottom">'. __('Bottom', 'fusion') .'</label>';
+					$input .= '<label for="olla_'. esc_attr($param['param_name']) .'_bottom">'. __('Bottom', 'olla') .'</label>';
 					$input .= '<input type="text" class="form-control box-bottom" id="olla_'. esc_attr($param['param_name']) .'_bottom" name="'. esc_attr($param['param_name']) .'_bottom" value="'. (!empty($box_bottom) ? esc_attr($box_bottom) : '') .'">';
-					$input .= '<label for="olla_'. esc_attr($param['param_name']) .'_left">'. __('Left', 'fusion') .'</label>';
+					$input .= '<label for="olla_'. esc_attr($param['param_name']) .'_left">'. __('Left', 'olla') .'</label>';
 					$input .= '<input type="text" class="form-control box-left" id="olla_'. esc_attr($param['param_name']) .'_left" name="'. esc_attr($param['param_name']) .'_left" value="'. (!empty($box_left) ? esc_attr($box_left) : '') .'">';
 				$input .= '</div>';
 				$input .= '<input type="hidden" class="form-control element-input box-string'. (!empty($param['nested']) ? ' nested' : '') .'" id="olla_'. esc_attr($param['param_name']) .'" name="'. esc_attr($param['param_name']) .'" value="'. esc_attr($param_value) .'">';
@@ -1777,13 +1777,13 @@ class OllaCore	{
 				}
 				if (!empty($attached_items)) {
 					$result['items'][] = array(
-						'text' => __('Items Attached to this Post', 'fusion'),
+						'text' => __('Items Attached to this Post', 'olla'),
 						'children' => $attached_items
 					);
 				}
 				if (!empty($nonattached_items)) {
 					$result['items'][] = array(
-						'text' => __('Other Items', 'fusion'),
+						'text' => __('Other Items', 'olla'),
 						'children' => $nonattached_items
 					);
 				}
