@@ -45,10 +45,10 @@ class OllaCore	{
 		add_action('wp_footer', array($this, 'output_style'), 11);
 
 		// Add shortcodes
-		add_shortcode('fsn_row', array($this, 'row_shortcode'));
-		add_shortcode('fsn_row_inner', array($this, 'row_shortcode'));
-		add_shortcode('fsn_column', array($this, 'column_shortcode'));
-		add_shortcode('fsn_column_inner', array($this, 'column_shortcode'));
+		add_shortcode('olla_row', array($this, 'row_shortcode'));
+		add_shortcode('olla_row_inner', array($this, 'row_shortcode'));
+		add_shortcode('olla_column', array($this, 'column_shortcode'));
+		add_shortcode('olla_column_inner', array($this, 'column_shortcode'));
 
 		// Replace Custom HTML entities
 		add_filter('the_content', array($this, 'decode_custom_entities'), 12); //after shortcode parsing
@@ -60,7 +60,7 @@ class OllaCore	{
 		add_action('load-post.php', array($this, 'add_screen_options'));
 
 		// Filter Image Sizes
-		add_filter('fsn_selectable_image_sizes', array($this, 'selectable_image_sizes'));
+		add_filter('olla_selectable_image_sizes', array($this, 'selectable_image_sizes'));
 
 		// Initialize AJAX modals
 		add_action( 'wp_ajax_add_element_modal', array($this, 'render_add_element_modal'));
@@ -72,7 +72,7 @@ class OllaCore	{
 		add_action( 'wp_ajax_update_video_preview', array($this, 'update_video_preview') );
 
 		// Lookup Posts from Select2 boxes
-		add_action( 'wp_ajax_fsn_posts_search', array($this, 'posts_search') );
+		add_action( 'wp_ajax_olla_posts_search', array($this, 'posts_search') );
 
 		//add hi-res image size
 		if ( function_exists( 'add_image_size' ) ) {
@@ -101,31 +101,31 @@ class OllaCore	{
 	 */
 
 	public function settings_defaults() {
-		$options = get_option('fsn_options');
-		$current_version = get_option('fsn_current_version');
+		$options = get_option('olla_options');
+		$current_version = get_option('olla_current_version');
 		if (empty($options) && empty($current_version)) {
 			//set default post types
-			if (empty($options['fsn_post_types'])) {
-				$options['fsn_post_types'] = array('post','page','template','component');
-				update_option('fsn_options', $options);
+			if (empty($options['olla_post_types'])) {
+				$options['olla_post_types'] = array('post','page','template','component');
+				update_option('olla_options', $options);
 			}
 			//check if using Fusion Base theme
 			$template = get_option('template');
 				if ($template != 'fusion-base') {
 				//enable front end bootstrap
-				if (empty($options['fsn_bootstrap_enable'])) {
-					$options['fsn_bootstrap_enable'] = 'on';
-					update_option('fsn_options', $options);
+				if (empty($options['olla_bootstrap_enable'])) {
+					$options['olla_bootstrap_enable'] = 'on';
+					update_option('olla_options', $options);
 				}
 				//enable fluid containers
-				if (empty($options['fsn_bootstrap_fluid'])) {
-					$options['fsn_bootstrap_fluid'] = 'on';
-					update_option('fsn_options', $options);
+				if (empty($options['olla_bootstrap_fluid'])) {
+					$options['olla_bootstrap_fluid'] = 'on';
+					update_option('olla_options', $options);
 				}
 			}
 		}
 		//set version number
-		update_option('fsn_current_version', FSN_VERSION);
+		update_option('olla_current_version', FSN_VERSION);
 	}
 
 	/**
@@ -138,9 +138,9 @@ class OllaCore	{
 	 */
 
 	public function set_version_number() {
-		$current_version = get_option('fsn_current_version');
+		$current_version = get_option('olla_current_version');
 		if (empty($current_version) || $current_version != FSN_VERSION) 	{
-			update_option('fsn_current_version', FSN_VERSION);
+			update_option('olla_current_version', FSN_VERSION);
 		}
 	}
 
@@ -155,14 +155,15 @@ class OllaCore	{
 	public function admin_enqueue_scripts_styles($hook_suffix) {
 		global $post;
 
-		$options = get_option('fsn_options');
+		$options = get_option('olla_options');
 		$user_admin_color = get_user_option( 'admin_color' );
-		$fsn_post_types = !empty($options['fsn_post_types']) ? $options['fsn_post_types'] : '';
+		$olla_post_types = !empty($options['olla_post_types']) ? $options['olla_post_types'] : '';
 
 		// Editor scripts and styles
-		if ( ($hook_suffix == 'post.php' || $hook_suffix == 'post-new.php') && ( (post_type_exists('notification') && $post->post_type == 'notification') || (!empty($fsn_post_types) && is_array($fsn_post_types) && in_array($post->post_type, $fsn_post_types)) ) ) {
+		if ( ($hook_suffix == 'post.php' || $hook_suffix == 'post-new.php') && ( (post_type_exists('notification') && $post->post_type == 'notification') || (!empty($olla_post_types) && is_array($olla_post_types) && in_array($post->post_type, $olla_post_types)) ) ) {
 			//bootstrap
-			wp_enqueue_script( 'bootstrap_admin', plugin_dir_url( __FILE__ ) . 'includes/bootstrap/admin/js/bootstrap.min.js', false, '3.3.5', true );
+			wp_enqueue_script( 'bootstrap_admin', plugin_dir_url( __FILE__ ) . 'assets/admin/js/bootstrap.min.js', false, '3.3.5', true );
+			
 			//jQuery UI
 			wp_enqueue_style( 'jquery-ui-custom', plugin_dir_url( __FILE__ ) . 'includes/css/jquery-ui-1.11.4.custom/jquery-ui.min.css', false, '1.11.4' );
 			wp_enqueue_script('jquery-ui-sortable');
@@ -172,13 +173,13 @@ class OllaCore	{
 			wp_enqueue_script( 'wp-color-picker' );
 			wp_enqueue_style( 'wp-color-picker' );
 			//plugin
-			wp_enqueue_script( 'fsn_core_admin', plugin_dir_url( __FILE__ ) . 'includes/js/fusion-core-admin.js', array('jquery'), '1.3.0', true );
-			wp_enqueue_style( 'fsn_core_admin', plugin_dir_url( __FILE__ ) . 'includes/css/fusion-core-admin.css', false, '1.3.0' );
+			wp_enqueue_script( 'olla_core_admin', plugin_dir_url( __FILE__ ) . 'includes/js/fusion-core-admin.js', array('jquery'), '1.3.0', true );
+			wp_enqueue_style( 'olla_core_admin', plugin_dir_url( __FILE__ ) . 'includes/css/fusion-core-admin.css', false, '1.3.0' );
 			if ($user_admin_color != 'fresh') {
-				wp_enqueue_style( 'fsn_core_admin_color_scheme', plugin_dir_url( __FILE__ ) . 'includes/css/colors/'. $user_admin_color .'/colors.css', false, '1.3.0' );
+				wp_enqueue_style( 'olla_core_admin_color_scheme', plugin_dir_url( __FILE__ ) . 'includes/css/colors/'. $user_admin_color .'/colors.css', false, '1.3.0' );
 			}
-			wp_localize_script( 'fsn_core_admin', 'fsnJS', array(
-					'fsnEditNonce' => wp_create_nonce('fsn-admin-edit')
+			wp_localize_script( 'olla_core_admin', 'ollaJS', array(
+					'ollaEditNonce' => wp_create_nonce('olla-admin-edit')
 				)
 			);
 
@@ -240,14 +241,14 @@ class OllaCore	{
 				'media_video_select' => __('Select Video', 'fusion'),
 				'media_video_use' => __('Use This Video', 'fusion')
 			);
-			wp_localize_script('fsn_core_admin', 'fsnL10n', $translation_array);
+			wp_localize_script('olla_core_admin', 'ollaL10n', $translation_array);
 		}
 		//fusion core query
-		wp_register_script( 'fsn_core_query', plugin_dir_url( __FILE__ ) . 'includes/js/fusion-core-query.js', array('jquery'), '1.3.0', true );
-		wp_localize_script( 'fsn_core_query', 'fsnQuery', array(
+		wp_register_script( 'olla_core_query', plugin_dir_url( __FILE__ ) . 'includes/js/fusion-core-query.js', array('jquery'), '1.3.0', true );
+		wp_localize_script( 'olla_core_query', 'ollaQuery', array(
 				'ajaxurl' => admin_url( 'admin-ajax.php' ),
-				'fsnQueryNonce' => wp_create_nonce('fsn-query'),
-				'fsnQueryError' => __('Oops, something went wrong with your query. Please reload the page and try again.','fusion'),
+				'ollaQueryNonce' => wp_create_nonce('olla-query'),
+				'ollaQueryError' => __('Oops, something went wrong with your query. Please reload the page and try again.','fusion'),
 			)
 		);
 		//select2
@@ -264,33 +265,33 @@ class OllaCore	{
 
 	public function front_enqueue_scripts_styles() {
 		//bootstrap
-		$options = get_option('fsn_options');
-		$bootstrap_enable = !empty($options['fsn_bootstrap_enable']) ? $options['fsn_bootstrap_enable'] : '';
+		$options = get_option('olla_options');
+		$bootstrap_enable = !empty($options['olla_bootstrap_enable']) ? $options['olla_bootstrap_enable'] : '';
 		if (!empty($bootstrap_enable)) {
 			wp_enqueue_script( 'bootstrap', plugin_dir_url( __FILE__ ) . 'includes/bootstrap/front/js/bootstrap.min.js', false, '3.3.5', true );
 			wp_enqueue_style( 'bootstrap', plugin_dir_url( __FILE__ ) . 'includes/bootstrap/front/css/bootstrap.min.css', false, '3.3.5' );
-			wp_enqueue_style( 'fsn_bootstrap', plugin_dir_url( __FILE__ ) . 'includes/css/fusion-bootstrap.css', 'bootstrap', '1.3.0' );
+			wp_enqueue_style( 'olla_bootstrap', plugin_dir_url( __FILE__ ) . 'includes/css/fusion-bootstrap.css', 'bootstrap', '1.3.0' );
 		}
 		//modernizr
 		wp_enqueue_script( 'modernizr', plugin_dir_url( __FILE__ ) . 'includes/js/modernizr-3.3.1-respond-1.4.2.min.js', false, '3.3.1');
 		//imagesLoaded
 		wp_enqueue_script('images_loaded', plugin_dir_url( __FILE__ ) .'includes/utilities/imagesloaded/imagesloaded.pkgd.min.js', array('jquery'), '3.1.8', true);
 		//plugin
-		wp_enqueue_script( 'fsn_core', plugin_dir_url( __FILE__ ) . 'includes/js/fusion-core.js', array('jquery','modernizr','images_loaded'), '1.3.0', true );
-		wp_enqueue_style( 'fsn_core', plugin_dir_url( __FILE__ ) . 'includes/css/fusion-core.css', false, '1.3.0' );
+		wp_enqueue_script( 'olla_core', plugin_dir_url( __FILE__ ) . 'includes/js/fusion-core.js', array('jquery','modernizr','images_loaded'), '1.3.0', true );
+		wp_enqueue_style( 'olla_core', plugin_dir_url( __FILE__ ) . 'includes/css/fusion-core.css', false, '1.3.0' );
 
 		//setup front end script for use with AJAX
-		wp_localize_script( 'fsn_core', 'fsnAjax', array(
+		wp_localize_script( 'olla_core', 'ollaAjax', array(
 				'ajaxurl' => admin_url( 'admin-ajax.php' ),
 				'pluginurl' =>  plugin_dir_url( __FILE__ )
 			)
 		);
 		//fusion core query
-		wp_register_script( 'fsn_core_query', plugin_dir_url( __FILE__ ) . 'includes/js/fusion-core-query.js', array('jquery'), '1.3.0', true );
-		wp_localize_script( 'fsn_core_query', 'fsnQuery', array(
+		wp_register_script( 'olla_core_query', plugin_dir_url( __FILE__ ) . 'includes/js/fusion-core-query.js', array('jquery'), '1.3.0', true );
+		wp_localize_script( 'olla_core_query', 'ollaQuery', array(
 				'ajaxurl' => admin_url( 'admin-ajax.php' ),
-				'fsnQueryNonce' => wp_create_nonce('fsn-query'),
-				'fsnQueryError' => __('Oops, something went wrong with your query. Please reload the page and try again.','fusion'),
+				'ollaQueryNonce' => wp_create_nonce('olla-query'),
+				'ollaQueryError' => __('Oops, something went wrong with your query. Please reload the page and try again.','fusion'),
 			)
 		);
 	}
@@ -318,8 +319,8 @@ class OllaCore	{
 	 */
 
 	public function register_param_sections() {
-		global $fsn_param_sections;
-		$fsn_param_sections = array(
+		global $olla_param_sections;
+		$olla_param_sections = array(
 			array(
 				'id' => 'general',
 				'name' => __('General', 'fusion')
@@ -337,7 +338,7 @@ class OllaCore	{
 				'name' => __('Animation', 'fusion')
 			)
 		);
-		$fsn_param_sections = apply_filters('fsn_param_sections', $fsn_param_sections);
+		$olla_param_sections = apply_filters('olla_param_sections', $olla_param_sections);
 	}
 
 	/**
@@ -349,8 +350,8 @@ class OllaCore	{
 
 	public function init_style_global() {
 		if (is_admin()) {
-			global $fsn_style_params;
-			$fsn_style_params = array(
+			global $olla_style_params;
+			$olla_style_params = array(
 				array(
 					'type' => 'box',
 					'param_name' => 'margin',
@@ -480,10 +481,10 @@ class OllaCore	{
 	 */
 
 	public function output_style() {
-		global $fsn_style_output;
+		global $olla_style_output;
 		echo '<style>';
-			if (!empty($fsn_style_output)) {
-				foreach($fsn_style_output as $key => $value) {
+			if (!empty($olla_style_output)) {
+				foreach($olla_style_output as $key => $value) {
 					if (!empty($value)) {
 						$selector = '.'. $key;
 						echo $selector . ' {';
@@ -517,14 +518,14 @@ class OllaCore	{
 								$background_color = $value['background_color'];
 								if (!empty($value['background_color_opacity'])) {
 									$background_color_opacity = $value['background_color_opacity'];
-									$rgb = fsn_hex2rgb($background_color);
+									$rgb = olla_hex2rgb($background_color);
 									echo 'background-color:'. $background_color .';';
 									echo 'background-color:rgba('. $rgb[0] .','. $rgb[1] .','. $rgb[2] .','. $background_color_opacity .');';
 								} else {
 									echo 'background-color:'. $background_color .';';
 								}
 							}
-							do_action('fsn_style_append_delcaration_block', $value);
+							do_action('olla_style_append_delcaration_block', $value);
 						echo '}';
 						if ( (!empty($value['margin_xs_custom']) && !empty($value['margin_xs'])) || (!empty($value['padding_xs_custom']) && !empty($value['padding_xs']) || !empty($value['text_align_xs'])) ) {
 							$selector = '.'. $key;
@@ -558,7 +559,7 @@ class OllaCore	{
 			 * @since 1.1.11
 			 *
 			 */
-			do_action('fsn_style_append');
+			do_action('olla_style_append');
 		echo '</style>';
 	}
 
@@ -626,7 +627,7 @@ class OllaCore	{
 						$output .= '</div>';
 						$output .= '<a href="#" class="control-icon edit-row" title="'. __('Edit Row', 'function') .'"><i class="material-icons md-18">&#xE3C9;</i></a>';
 					$output .= '</div>';
-					$output .= '<a href="#" class="fsn-add-row" title="'. __('Add Row', 'fusion') .'"><i class="material-icons md-18">&#xE147;</i></a>';
+					$output .= '<a href="#" class="olla-add-row" title="'. __('Add Row', 'fusion') .'"><i class="material-icons md-18">&#xE147;</i></a>';
 				$output .= '</div>';
 				$output .= '<div class="row-wrapper">';
 					$output .= '<div class="row"'. $shortcode_atts_data .'>'. do_shortcode($content) .'</div>';
@@ -665,7 +666,7 @@ class OllaCore	{
 			}
 
 			//filter for modifying style
-			$style = apply_filters('fsn_row_style', $style, $atts);
+			$style = apply_filters('olla_row_style', $style, $atts);
 
 			//build classes
 			$classes_array = array();
@@ -691,7 +692,7 @@ class OllaCore	{
 			}
 
 			//filter for adding classes
-			$classes_array = apply_filters('fsn_row_classes', $classes_array, $atts);
+			$classes_array = apply_filters('olla_row_classes', $classes_array, $atts);
 
 			if (!empty($classes_array)) {
 				$classes = implode(' ', $classes_array);
@@ -701,32 +702,32 @@ class OllaCore	{
 
 			//open row container
 			if ($row_width == 'container') {
-				$output .= '<div '. (!empty($id) ? 'id="'. esc_attr($id) .'" ' : '') .'class="fsn-row full-width-row '. fsn_style_params_class($atts) . (!empty($classes) ? ' '. esc_attr($classes) : '') .'"'. (!empty($style) ? ' style="'. esc_attr($style) .'"' : '') .'>';
+				$output .= '<div '. (!empty($id) ? 'id="'. esc_attr($id) .'" ' : '') .'class="olla-row full-width-row '. olla_style_params_class($atts) . (!empty($classes) ? ' '. esc_attr($classes) : '') .'"'. (!empty($style) ? ' style="'. esc_attr($style) .'"' : '') .'>';
 					//action executed before the front-end row shortcode container output
 					ob_start();
-					do_action('fsn_before_row_container', $atts);
+					do_action('olla_before_row_container', $atts);
 					$output .= ob_get_clean();
 					//open fluid or defined container
-					$options = get_option('fsn_options');
-					if (empty($options['fsn_bootstrap_fluid'])) {
+					$options = get_option('olla_options');
+					if (empty($options['olla_bootstrap_fluid'])) {
 						$output .= '<div class="container">';
 					} else {
 						$output .= '<div class="container-fluid">';
 					}
 			} elseif ($row_width == 'full-width') {
-				$output .= '<div '. (!empty($id) ? 'id="'. esc_attr($id) .'" ' : '') .' class="fsn-row full-width-container '. fsn_style_params_class($atts) . (!empty($classes) ? ' '. esc_attr($classes) : '') .'"'. (!empty($style) ? ' style="'. esc_attr($style) .'"' : '') .'>';
+				$output .= '<div '. (!empty($id) ? 'id="'. esc_attr($id) .'" ' : '') .' class="olla-row full-width-container '. olla_style_params_class($atts) . (!empty($classes) ? ' '. esc_attr($classes) : '') .'"'. (!empty($style) ? ' style="'. esc_attr($style) .'"' : '') .'>';
 			}
 
 			//action executed before the front-end row shortcode output
 			ob_start();
-			do_action('fsn_before_row', $atts);
+			do_action('olla_before_row', $atts);
 			$output .= ob_get_clean();
 
 			$output .= '<div class="row">'. do_shortcode($content) .'</div>';
 
 			//action executed after the front-end row shortcode output
 			ob_start();
-			do_action('fsn_after_row', $atts);
+			do_action('olla_after_row', $atts);
 			$output .= ob_get_clean();
 
 			//close row container
@@ -734,7 +735,7 @@ class OllaCore	{
 					$output .= '</div>'; //close container
 					//action executed after the front-end row shortcode container output
 					ob_start();
-					do_action('fsn_after_row_container', $atts);
+					do_action('olla_after_row_container', $atts);
 					$output .= ob_get_clean();
 				$output .= '</div>'; //close full width row
 			} elseif ($row_width == 'full-width') {
@@ -798,7 +799,7 @@ class OllaCore	{
 					$output .= '<div class="column-wrapper">';
 						$output .= do_shortcode($content);
 					$output .= '</div>';
-					$output .= '<a href="#" class="fsn-add-element" data-container="column" title="'. __('Add Element', 'fusion') .'"><i class="material-icons md-18">&#xE147;</i></a>';
+					$output .= '<a href="#" class="olla-add-element" data-container="column" title="'. __('Add Element', 'fusion') .'"><i class="material-icons md-18">&#xE147;</i></a>';
 				$output .= '</div>';
 			$output .= '</div>';
 		} else {
@@ -807,7 +808,7 @@ class OllaCore	{
 			$style = '';
 
 			//filter for modifying style
-			$style = apply_filters('fsn_column_style', $style, $atts);
+			$style = apply_filters('olla_column_style', $style, $atts);
 
 			//build classes
 			$classes_array = array();
@@ -818,7 +819,7 @@ class OllaCore	{
 			}
 
 			//filter for adding classes
-			$classes_array = apply_filters('fsn_column_classes', $classes_array, $atts);
+			$classes_array = apply_filters('olla_column_classes', $classes_array, $atts);
 
 			if (!empty($classes_array)) {
 				$classes = implode(' ', $classes_array);
@@ -827,14 +828,14 @@ class OllaCore	{
 			$output = '';
 			//action executed before the front-end column shortcode output
 			ob_start();
-			do_action('fsn_before_column', $atts);
+			do_action('olla_before_column', $atts);
 			$output .= ob_get_clean();
 
-			$output .= '<div class="col-sm-'. esc_attr($width) . (!empty($offset) ? ' col-sm-offset-'. esc_attr($offset) : '') .'"><div class="fsn-column-inner '. fsn_style_params_class($atts) . (!empty($classes) ? ' '. esc_attr($classes) : '') .'"'. (!empty($style) ? ' style="'. esc_attr($style) .'"' : '') .'>'. do_shortcode($content) .'</div></div>';
+			$output .= '<div class="col-sm-'. esc_attr($width) . (!empty($offset) ? ' col-sm-offset-'. esc_attr($offset) : '') .'"><div class="olla-column-inner '. olla_style_params_class($atts) . (!empty($classes) ? ' '. esc_attr($classes) : '') .'"'. (!empty($style) ? ' style="'. esc_attr($style) .'"' : '') .'>'. do_shortcode($content) .'</div></div>';
 
 			//action executed after the front-end column shortcode output
 			ob_start();
-			do_action('fsn_after_column', $atts);
+			do_action('olla_after_column', $atts);
 			$output .= ob_get_clean();
 		}
 
@@ -854,7 +855,7 @@ class OllaCore	{
 
 	public static function decode_custom_entities($content) {
 
-		$custom_entities = array('#fsnquot;','#fsnsqbl;','#fsnsqbr;','#fsnlt;','#fsngt;');
+		$custom_entities = array('#ollaquot;','#ollasqbl;','#ollasqbr;','#ollalt;','#ollagt;');
 		$html_entities = array('"','[',']','<','>');
 
 		$content = str_replace($custom_entities, $html_entities, $content);
@@ -873,21 +874,21 @@ class OllaCore	{
 	 */
 
 	public function render_editor($post) {
-		$options = get_option('fsn_options');
-		$fsn_post_types = !empty($options['fsn_post_types']) ? $options['fsn_post_types'] : '';
-		if (!empty($fsn_post_types) && is_array($fsn_post_types) && in_array($post->post_type, $fsn_post_types)) {
-			echo '<a href="#" class="button button-primary fsn-toggle-editor"><div class="fsn-toggle-editor-default">'. __('Switch To Default Editor', 'fusion') .'</div><div class="fsn-toggle-editor-fusion">'. __('Switch To Fusion Editor', 'fusion') .'</div></a>';
-			echo '<div class="fsn-editor wp-editor-container">';
-				echo '<div class="fsn-main-controls">';
+		$options = get_option('olla_options');
+		$olla_post_types = !empty($options['olla_post_types']) ? $options['olla_post_types'] : '';
+		if (!empty($olla_post_types) && is_array($olla_post_types) && in_array($post->post_type, $olla_post_types)) {
+			echo '<a href="#" class="button button-primary olla-toggle-editor"><div class="olla-toggle-editor-default">'. __('Switch To Default Editor', 'fusion') .'</div><div class="olla-toggle-editor-fusion">'. __('Switch To Fusion Editor', 'fusion') .'</div></a>';
+			echo '<div class="olla-editor wp-editor-container">';
+				echo '<div class="olla-main-controls">';
 					if ($post->post_type != 'template') {
-						echo '<a href="#" class="button fsn-save-template">'. __('Save Template', 'fusion') .'</a>';
+						echo '<a href="#" class="button olla-save-template">'. __('Save Template', 'fusion') .'</a>';
 					}
-					echo '<a href="#" class="button fsn-load-template" style="margin-left:5px;">'. __('Load Template', 'fusion') .'</a>';
-					//echo '<a href="#" class="button fsn-toggle-previews" style="margin-left:5px;">'. __('Hide Element Previews', 'fusion') .'</a>';
+					echo '<a href="#" class="button olla-load-template" style="margin-left:5px;">'. __('Load Template', 'fusion') .'</a>';
+					//echo '<a href="#" class="button olla-toggle-previews" style="margin-left:5px;">'. __('Hide Element Previews', 'fusion') .'</a>';
 				echo '</div>';
-				echo '<div class="fsn-interface-container">';
+				echo '<div class="olla-interface-container">';
 					//output grid content
-					echo '<div id="fsn-main-ui" class="fsn-interface-grid">';
+					echo '<div id="olla-main-ui" class="olla-interface-grid">';
 						echo do_shortcode($post->post_content);
 					echo '</div>';
 				echo '</div>';
@@ -905,16 +906,16 @@ class OllaCore	{
 
 	public function add_screen_options() {
 		$current_screen = get_current_screen();
-		$options = get_option('fsn_options');
-		$fsn_post_types = !empty($options['fsn_post_types']) ? $options['fsn_post_types'] : '';
-		if ( !empty($fsn_post_types) && is_array($fsn_post_types) && in_array($current_screen->post_type, $fsn_post_types) ) {
+		$options = get_option('olla_options');
+		$olla_post_types = !empty($options['olla_post_types']) ? $options['olla_post_types'] : '';
+		if ( !empty($olla_post_types) && is_array($olla_post_types) && in_array($current_screen->post_type, $olla_post_types) ) {
 			add_filter( 'screen_settings', array($this, 'filter_screen_settings'), 10, 2 );
 		}
 	}
 
 	public function filter_screen_settings($screen_settings, $screen_object) {
-		$expand = '<fieldset class="editor-expand"><legend>' . __('Fusion settings', 'fusion') . '</legend><label for="fsn_disable_tooltips">';
-		$expand .= '<input type="checkbox" id="fsn_disable_tooltips"' . checked( get_user_setting( 'fsn_disable_tooltips', false ), 'on', false ) . ' />';
+		$expand = '<fieldset class="editor-expand"><legend>' . __('Fusion settings', 'fusion') . '</legend><label for="olla_disable_tooltips">';
+		$expand .= '<input type="checkbox" id="olla_disable_tooltips"' . checked( get_user_setting( 'olla_disable_tooltips', false ), 'on', false ) . ' />';
 		$expand .= __('Disable Fusion tooltips.', 'fusion') . '</label></fieldset>';
 		$screen_settings .= $expand;
 		return $screen_settings;
@@ -928,10 +929,10 @@ class OllaCore	{
 	 * @since 1.0.0
 	 */
 
-	public function selectable_image_sizes($fsn_selectable_image_sizes) {
+	public function selectable_image_sizes($olla_selectable_image_sizes) {
 		//unset WordPress medium large image size
-		unset($fsn_selectable_image_sizes['medium_large']);
-		return $fsn_selectable_image_sizes;
+		unset($olla_selectable_image_sizes['medium_large']);
+		return $olla_selectable_image_sizes;
 	}
 
 	/**
@@ -942,22 +943,22 @@ class OllaCore	{
 
 	public function render_add_element_modal() {
 		//verify nonce
-		check_ajax_referer( 'fsn-admin-edit', 'security' );
+		check_ajax_referer( 'olla-admin-edit', 'security' );
 
 		//verify capabilities
 		if ( !current_user_can( 'edit_post', intval($_POST['post_id']) ) )
 			die( '-1' );
 
 		//get elements global
-		global $fsn_elements;
+		global $olla_elements;
 		$nesting_level = intval($_POST['nesting_level']);
 		$tabs_nesting_level = intval($_POST['tabs_nesting_level']);
 		?>
-		<div class="modal fade" id="addElementModal" tabindex="-1" role="dialog" aria-labelledby="fsnModalLabel" aria-hidden="true">
+		<div class="modal fade" id="addElementModal" tabindex="-1" role="dialog" aria-labelledby="ollaModalLabel" aria-hidden="true">
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h4 class="modal-title" id="fsnModalLabel"><?php _e('Add Element', 'fusion'); ?></h4>
+						<h4 class="modal-title" id="ollaModalLabel"><?php _e('Add Element', 'fusion'); ?></h4>
 						<a href="#" class="close" data-dismiss="modal" aria-label="<?php _e('Close', 'fusion'); ?>"><span aria-hidden="true"><i class="material-icons">&#xE5CD;</i></span></a>
 					</div>
 					<div class="modal-body">
@@ -972,11 +973,11 @@ class OllaCore	{
 									<a href="#" class="element-item" data-element-type="tabs"><i class="material-icons">tab</i> <span class="element-name"><?php _e('Tabs', 'fusion'); ?></span></a>
 								</div>
 							<?php endif; ?>
-							<?php if (!empty($fsn_elements)) {
+							<?php if (!empty($olla_elements)) {
 								//output all elements
-								foreach($fsn_elements as $fsn_element) {
+								foreach($olla_elements as $olla_element) {
 									echo '<div class="element-grid-item">';
-										echo '<a href="#" class="element-item" data-element-type="'. esc_attr($fsn_element->shortcode_tag) .'">'. (!empty($fsn_element->icon) ? '<i class="material-icons">'. esc_html($fsn_element->icon) .'</i> ' : '') .'<span class="element-name">'. esc_html($fsn_element->name) .'</span></a>';
+										echo '<a href="#" class="element-item" data-element-type="'. esc_attr($olla_element->shortcode_tag) .'">'. (!empty($olla_element->icon) ? '<i class="material-icons">'. esc_html($olla_element->icon) .'</i> ' : '') .'<span class="element-name">'. esc_html($olla_element->name) .'</span></a>';
 									echo '</div>';
 								}
 							} ?>
@@ -1000,7 +1001,7 @@ class OllaCore	{
 
 	public function render_edit_row_modal() {
 		//verify nonce
-		check_ajax_referer( 'fsn-admin-edit', 'security' );
+		check_ajax_referer( 'olla-admin-edit', 'security' );
 
 		//verify capabilities
 		if ( !current_user_can( 'edit_post', intval($_POST['post_id']) ) )
@@ -1019,13 +1020,13 @@ class OllaCore	{
       '' => __('Choose row function.', 'fusion'),
       'collapse' => __('Collapse', 'fusion')
     );
-		$row_function_options = apply_filters('fsn_row_function_options', $row_function_options);
+		$row_function_options = apply_filters('olla_row_function_options', $row_function_options);
 
 		$row_style_options = array(
 			'light' => __('Light', 'fusion'),
 			'dark' => __('Dark', 'fusion')
 		);
-		$row_style_options = apply_filters('fsn_row_style_options', $row_style_options);
+		$row_style_options = apply_filters('olla_row_style_options', $row_style_options);
 
 		//map row parameters
 		$params = array(
@@ -1151,32 +1152,32 @@ class OllaCore	{
 		);
 
 		//filter row params
-		$params = apply_filters('fsn_row_params', $params);
+		$params = apply_filters('olla_row_params', $params);
 
 		//add style params
-		global $fsn_style_params;
-		$style_params = $fsn_style_params;
+		global $olla_style_params;
+		$style_params = $olla_style_params;
 		$params = array_merge_recursive($params, $style_params);
 
 		//sort params into sections
-		$fsn_param_sections = fsn_get_sorted_param_sections($params);
+		$olla_param_sections = olla_get_sorted_param_sections($params);
 		$tabset_id = uniqid();
 		?>
-		<div class="modal fade" id="editRowModal" tabindex="-1" role="dialog" aria-labelledby="fsnModalLabel" aria-hidden="true">
+		<div class="modal fade" id="editRowModal" tabindex="-1" role="dialog" aria-labelledby="ollaModalLabel" aria-hidden="true">
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
 					<div class="modal-header has-tabs">
-						<h4 class="modal-title" id="fsnModalLabel"><?php _e('Row', 'fusion'); ?></h4>
+						<h4 class="modal-title" id="ollaModalLabel"><?php _e('Row', 'fusion'); ?></h4>
 						<a href="#" class="close" data-dismiss="modal" aria-label="<?php _e('Close', 'fusion'); ?>"><span aria-hidden="true"><i class="material-icons">&#xE5CD;</i></span></a>
 						<?php
 						echo '<ul class="nav nav-tabs" role="tablist">';
 							$active_tab = true;
-							for($i=0; $i < count($fsn_param_sections); $i++) {
-								if (count($fsn_param_sections[$i]['params']) > 0) {
-							    	echo '<li role="presentation"'. ($active_tab == true ? ' class="active"' : '') .'><a href="#'. esc_attr($fsn_param_sections[$i]['id']) .'-'. esc_attr($tabset_id) .'" aria-controls="options" role="tab" data-toggle="tab">'. esc_html($fsn_param_sections[$i]['name']) .'</a></li>';
+							for($i=0; $i < count($olla_param_sections); $i++) {
+								if (count($olla_param_sections[$i]['params']) > 0) {
+							    	echo '<li role="presentation"'. ($active_tab == true ? ' class="active"' : '') .'><a href="#'. esc_attr($olla_param_sections[$i]['id']) .'-'. esc_attr($tabset_id) .'" aria-controls="options" role="tab" data-toggle="tab">'. esc_html($olla_param_sections[$i]['name']) .'</a></li>';
 							    	$active_tab = false;
 						    	} else {
-							    	echo '<li role="presentation" style="display:none;"><a href="#'. esc_attr($fsn_param_sections[$i]['id']) .'-'. esc_attr($tabset_id) .'" aria-controls="options" role="tab" data-toggle="tab">'. esc_html($fsn_param_sections[$i]['name']) .'</a></li>';
+							    	echo '<li role="presentation" style="display:none;"><a href="#'. esc_attr($olla_param_sections[$i]['id']) .'-'. esc_attr($tabset_id) .'" aria-controls="options" role="tab" data-toggle="tab">'. esc_html($olla_param_sections[$i]['name']) .'</a></li>';
 						    	}
 							}
 						echo '</ul>';
@@ -1187,13 +1188,13 @@ class OllaCore	{
 							<?php
 							echo '<div class="tab-content">';
 								$active_tab = true;
-								for($i=0; $i < count($fsn_param_sections); $i++) {
-									if (count($fsn_param_sections[$i]['params']) > 0) {
-										echo '<div role="tabpanel" class="tab-pane'. ($active_tab == true ? ' active' : '') .'" id="'. esc_attr($fsn_param_sections[$i]['id']) .'-'. esc_attr($tabset_id) .'" data-section-id="'. esc_attr($fsn_param_sections[$i]['id']) .'">';
-											foreach($fsn_param_sections[$i]['params'] as $param) {
+								for($i=0; $i < count($olla_param_sections); $i++) {
+									if (count($olla_param_sections[$i]['params']) > 0) {
+										echo '<div role="tabpanel" class="tab-pane'. ($active_tab == true ? ' active' : '') .'" id="'. esc_attr($olla_param_sections[$i]['id']) .'-'. esc_attr($tabset_id) .'" data-section-id="'. esc_attr($olla_param_sections[$i]['id']) .'">';
+											foreach($olla_param_sections[$i]['params'] as $param) {
 												//check for saved values
 												if (!empty($param['param_name'])) {
-													if (!isset($param['content_field']) && $param['param_name'] == 'fsncontent') {
+													if (!isset($param['content_field']) && $param['param_name'] == 'ollacontent') {
 														$param['content_field'] = true;
 													} elseif (empty($param['content_field'])) {
 														$param['content_field'] = false;
@@ -1238,7 +1239,7 @@ class OllaCore	{
 										echo '</div>';
 										$active_tab = false;
 									} else {
-										echo '<div role="tabpanel" class="tab-pane" id="'. esc_attr($fsn_param_sections[$i]['id']) .'-'. esc_attr($tabset_id) .'" data-section-id="'. esc_attr($fsn_param_sections[$i]['id']) .'"></div>';
+										echo '<div role="tabpanel" class="tab-pane" id="'. esc_attr($olla_param_sections[$i]['id']) .'-'. esc_attr($tabset_id) .'" data-section-id="'. esc_attr($olla_param_sections[$i]['id']) .'"></div>';
 									}
 								}
 							echo '</div>';
@@ -1264,7 +1265,7 @@ class OllaCore	{
 
 	public function render_edit_column_modal() {
 		//verify nonce
-		check_ajax_referer( 'fsn-admin-edit', 'security' );
+		check_ajax_referer( 'olla-admin-edit', 'security' );
 
 		//verify capabilities
 		if ( !current_user_can( 'edit_post', intval($_POST['post_id']) ) )
@@ -1282,7 +1283,7 @@ class OllaCore	{
 			'light' => __('Light', 'fusion'),
 			'dark' => __('Dark', 'fusion')
 		);
-		$column_style_options = apply_filters('fsn_column_style_options', $column_style_options);
+		$column_style_options = apply_filters('olla_column_style_options', $column_style_options);
 		//map column parameters
 		$params = array(
 			array(
@@ -1296,32 +1297,32 @@ class OllaCore	{
 		);
 
 		//filter column params
-		$params = apply_filters('fsn_column_params', $params);
+		$params = apply_filters('olla_column_params', $params);
 
 		//add style params
-		global $fsn_style_params;
-		$style_params = $fsn_style_params;
+		global $olla_style_params;
+		$style_params = $olla_style_params;
 		$params = array_merge_recursive($params, $style_params);
 
 		//sort params into sections
-		$fsn_param_sections = fsn_get_sorted_param_sections($params);
+		$olla_param_sections = olla_get_sorted_param_sections($params);
 		$tabset_id = uniqid();
 		?>
-		<div class="modal fade" id="editColModal" tabindex="-1" role="dialog" aria-labelledby="fsnModalLabel" aria-hidden="true">
+		<div class="modal fade" id="editColModal" tabindex="-1" role="dialog" aria-labelledby="ollaModalLabel" aria-hidden="true">
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
 					<div class="modal-header has-tabs">
-						<h4 class="modal-title" id="fsnModalLabel"><?php _e('Column', 'fusion'); ?></h4>
+						<h4 class="modal-title" id="ollaModalLabel"><?php _e('Column', 'fusion'); ?></h4>
 						<a href="#" class="close" data-dismiss="modal" aria-label="<?php _e('Close', 'fusion'); ?>"><span aria-hidden="true"><i class="material-icons">&#xE5CD;</i></span></a>
 						<?php
 						echo '<ul class="nav nav-tabs" role="tablist">';
 							$active_tab = true;
-							for($i=0; $i < count($fsn_param_sections); $i++) {
-								if (count($fsn_param_sections[$i]['params']) > 0) {
-							    	echo '<li role="presentation"'. ($active_tab == true ? ' class="active"' : '') .'><a href="#'. esc_attr($fsn_param_sections[$i]['id']) .'-'. esc_attr($tabset_id) .'" aria-controls="options" role="tab" data-toggle="tab">'. esc_html($fsn_param_sections[$i]['name']) .'</a></li>';
+							for($i=0; $i < count($olla_param_sections); $i++) {
+								if (count($olla_param_sections[$i]['params']) > 0) {
+							    	echo '<li role="presentation"'. ($active_tab == true ? ' class="active"' : '') .'><a href="#'. esc_attr($olla_param_sections[$i]['id']) .'-'. esc_attr($tabset_id) .'" aria-controls="options" role="tab" data-toggle="tab">'. esc_html($olla_param_sections[$i]['name']) .'</a></li>';
 							    	$active_tab = false;
 						    	} else {
-							    	echo '<li role="presentation" style="display:none;"><a href="#'. esc_attr($fsn_param_sections[$i]['id']) .'-'. esc_attr($tabset_id) .'" aria-controls="options" role="tab" data-toggle="tab">'. esc_html($fsn_param_sections[$i]['name']) .'</a></li>';
+							    	echo '<li role="presentation" style="display:none;"><a href="#'. esc_attr($olla_param_sections[$i]['id']) .'-'. esc_attr($tabset_id) .'" aria-controls="options" role="tab" data-toggle="tab">'. esc_html($olla_param_sections[$i]['name']) .'</a></li>';
 						    	}
 							}
 						echo '</ul>';
@@ -1332,13 +1333,13 @@ class OllaCore	{
 							<?php
 							echo '<div class="tab-content">';
 								$active_tab = true;
-								for($i=0; $i < count($fsn_param_sections); $i++) {
-									if (count($fsn_param_sections[$i]['params']) > 0) {
-										echo '<div role="tabpanel" class="tab-pane'. ($active_tab == true ? ' active' : '') .'" id="'. esc_attr($fsn_param_sections[$i]['id']) .'-'. esc_attr($tabset_id) .'" data-section-id="'. esc_attr($fsn_param_sections[$i]['id']) .'">';
-											foreach($fsn_param_sections[$i]['params'] as $param) {
+								for($i=0; $i < count($olla_param_sections); $i++) {
+									if (count($olla_param_sections[$i]['params']) > 0) {
+										echo '<div role="tabpanel" class="tab-pane'. ($active_tab == true ? ' active' : '') .'" id="'. esc_attr($olla_param_sections[$i]['id']) .'-'. esc_attr($tabset_id) .'" data-section-id="'. esc_attr($olla_param_sections[$i]['id']) .'">';
+											foreach($olla_param_sections[$i]['params'] as $param) {
 												//check for saved values
 												if (!empty($param['param_name'])) {
-													if (!isset($param['content_field']) && $param['param_name'] == 'fsncontent') {
+													if (!isset($param['content_field']) && $param['param_name'] == 'ollacontent') {
 														$param['content_field'] = true;
 													} elseif (empty($param['content_field'])) {
 														$param['content_field'] = false;
@@ -1383,7 +1384,7 @@ class OllaCore	{
 										echo '</div>';
 										$active_tab = false;
 									} else {
-										echo '<div role="tabpanel" class="tab-pane" id="'. esc_attr($fsn_param_sections[$i]['id']) .'-'. esc_attr($tabset_id) .'" data-section-id="'. esc_attr($fsn_param_sections[$i]['id']) .'"></div>';
+										echo '<div role="tabpanel" class="tab-pane" id="'. esc_attr($olla_param_sections[$i]['id']) .'-'. esc_attr($tabset_id) .'" data-section-id="'. esc_attr($olla_param_sections[$i]['id']) .'"></div>';
 									}
 								}
 							echo '</div>';
@@ -1418,26 +1419,26 @@ class OllaCore	{
 		$input = '';
 		switch($param['type']) {
 			case 'text':
-				$input .= '<label for="fsn_'. esc_attr($param['param_name']) .'">'. esc_html($param['label']) .'</label>';
+				$input .= '<label for="olla_'. esc_attr($param['param_name']) .'">'. esc_html($param['label']) .'</label>';
 				$input .= !empty($param['help']) ? '<p class="help-block">'. esc_html($param['help']) .'</p>' : '';
-				$input .= '<input type="text" class="form-control element-input'. (!empty($param['nested']) ? ' nested' : '') . (!empty($param['encode_base64']) ? ' encode-base64' : '') . (!empty($param['encode_url']) ? ' encode-url' : '') .'" id="fsn_'. esc_attr($param['param_name']) .'" name="'. esc_attr($param['param_name']) .'" value="'. esc_attr($param_value) .'"'. (!empty($param['placeholder']) ? ' placeholder="'. esc_attr($param['placeholder']) .'"' : '') .'>';
+				$input .= '<input type="text" class="form-control element-input'. (!empty($param['nested']) ? ' nested' : '') . (!empty($param['encode_base64']) ? ' encode-base64' : '') . (!empty($param['encode_url']) ? ' encode-url' : '') .'" id="olla_'. esc_attr($param['param_name']) .'" name="'. esc_attr($param['param_name']) .'" value="'. esc_attr($param_value) .'"'. (!empty($param['placeholder']) ? ' placeholder="'. esc_attr($param['placeholder']) .'"' : '') .'>';
 				break;
 			case 'textarea':
 				if (!empty($param['encode_base64']) || !empty($param['encode_url'])) {
 					$param_value = $param_value;
 				} elseif (!empty($param['content_field']) && empty($param['encode_base64']) && empty($param['encode_url'])) {
-					$param_value = esc_textarea(fsn_unautop($param_value));
+					$param_value = esc_textarea(olla_unautop($param_value));
 				} else {
 					$param_value = esc_textarea($param_value);
 				}
-				$input .= '<label for="fsn_'. esc_attr($param['param_name']) .'">'. esc_html($param['label']) .'</label>';
+				$input .= '<label for="olla_'. esc_attr($param['param_name']) .'">'. esc_html($param['label']) .'</label>';
 				$input .= !empty($param['help']) ? '<p class="help-block">'. esc_html($param['help']) .'</p>' : '';
-				$input .= '<textarea class="form-control element-input'. (!empty($param['content_field']) ? ' content-field' : '') .  (!empty($param['nested']) ? ' nested' : '') . (!empty($param['encode_base64']) ? ' encode-base64' : '') . (!empty($param['encode_url']) ? ' encode-url' : '') .'" id="fsn_'. esc_attr($param['param_name']) .'" name="'. esc_attr($param['param_name']) .'" rows="5">'. $param_value .'</textarea>';
+				$input .= '<textarea class="form-control element-input'. (!empty($param['content_field']) ? ' content-field' : '') .  (!empty($param['nested']) ? ' nested' : '') . (!empty($param['encode_base64']) ? ' encode-base64' : '') . (!empty($param['encode_url']) ? ' encode-url' : '') .'" id="olla_'. esc_attr($param['param_name']) .'" name="'. esc_attr($param['param_name']) .'" rows="5">'. $param_value .'</textarea>';
 				break;
 			case 'checkbox':
 				$input .= '<div class="checkbox">';
-					$input .= '<label for="fsn_'. esc_attr($param['param_name']) .'">';
-						$input .= '<input type="checkbox" class="element-input'. (!empty($param['nested']) ? ' nested' : '') .'" id="fsn_'. esc_attr($param['param_name']) .'" name="'. esc_attr($param['param_name']) .'"'. checked( $param_value, 'on', false ) .'>';
+					$input .= '<label for="olla_'. esc_attr($param['param_name']) .'">';
+						$input .= '<input type="checkbox" class="element-input'. (!empty($param['nested']) ? ' nested' : '') .'" id="olla_'. esc_attr($param['param_name']) .'" name="'. esc_attr($param['param_name']) .'"'. checked( $param_value, 'on', false ) .'>';
 						$input .= esc_html($param['label']);
 					$input .= '</label>';
 				$input .= '</div>';
@@ -1461,7 +1462,7 @@ class OllaCore	{
 		    	}
 		    	break;
 			case 'select':
-				$input .= '<label for="fsn_'. esc_attr($param['param_name']) .'">'. esc_html($param['label']) .'</label>';
+				$input .= '<label for="olla_'. esc_attr($param['param_name']) .'">'. esc_html($param['label']) .'</label>';
 				$input .= !empty($param['help']) ? '<p class="help-block">'. esc_html($param['help']) .'</p>' : '';
 				$input .= '<select class="form-control element-input'. (!empty($param['nested']) ? ' nested' : '') .'" name="'. esc_attr($param['param_name']) .'">';
 					foreach($param['options'] as $key => $value) {
@@ -1470,7 +1471,7 @@ class OllaCore	{
 				$input .= '</select>';
 				break;
 			case 'select_post':
-				$input .= '<label for="fsn_'. esc_attr($param['param_name']) .'">'. esc_html($param['label']) .'</label>';
+				$input .= '<label for="olla_'. esc_attr($param['param_name']) .'">'. esc_html($param['label']) .'</label>';
 				$input .= !empty($param['help']) ? '<p class="help-block">'. esc_html($param['help']) .'</p>' : '';
 				$input .= '<select class="form-control element-input select2-posts-element'. (!empty($param['nested']) ? ' nested' : '') .'" name="'. esc_attr($param['param_name']) .'" style="width:100%;" data-post-type="'. (!empty($param['post_type']) ? esc_attr(json_encode($param['post_type'])) : 'post' ) .'" data-placeholder="'. __('Choose an Option.', 'fusion') .'">';
 					$input .= '<option></option>';
@@ -1484,23 +1485,23 @@ class OllaCore	{
 				$input .= !empty($param['help']) ? '<p class="help-block">'. esc_html($param['help']) .'</p>' : '';
 				if ($param['content_field'] == false) {
 					ob_start();
-					wp_editor($param_value, 'fsncontent', array('editor_class' => 'element-input'));
+					wp_editor($param_value, 'ollacontent', array('editor_class' => 'element-input'));
 					$input .= ob_get_clean();
 				} else {
 					ob_start();
-					wp_editor($param_value, 'fsncontent');
+					wp_editor($param_value, 'ollacontent');
 					$input .= ob_get_clean();
 				}
 				break;
 			case 'colorpicker':
-				$input .= '<label for="fsn_'. esc_attr($param['param_name']) .'">'. esc_html($param['label']) .'</label>';
+				$input .= '<label for="olla_'. esc_attr($param['param_name']) .'">'. esc_html($param['label']) .'</label>';
 				$input .= !empty($param['help']) ? '<p class="help-block">'. esc_html($param['help']) .'</p>' : '';
-				$input .= '<input type="text" class="form-control element-input fsn-color-picker'. (!empty($param['nested']) ? ' nested' : '') .'" id="fsn_'. esc_attr($param['param_name']) .'" name="'. esc_attr($param['param_name']) .'" value="'. esc_attr($param_value) .'">';
+				$input .= '<input type="text" class="form-control element-input olla-color-picker'. (!empty($param['nested']) ? ' nested' : '') .'" id="olla_'. esc_attr($param['param_name']) .'" name="'. esc_attr($param['param_name']) .'" value="'. esc_attr($param_value) .'">';
 				break;
 			case 'image':
-				$input .= '<label for="fsn_'. esc_attr($param['param_name']) .'">'. esc_html($param['label']) .'</label>';
+				$input .= '<label for="olla_'. esc_attr($param['param_name']) .'">'. esc_html($param['label']) .'</label>';
 				$input .= !empty($param['help']) ? '<p class="help-block">'. esc_html($param['help']) .'</p>' : '';
-				$input .= '<input type="hidden" class="form-control element-input'. (!empty($param['nested']) ? ' nested' : '') .'" id="fsn_'. esc_attr($param['param_name']) .'" name="'. esc_attr($param['param_name']) .'" value="'. esc_attr($param_value) .'">';
+				$input .= '<input type="hidden" class="form-control element-input'. (!empty($param['nested']) ? ' nested' : '') .'" id="olla_'. esc_attr($param['param_name']) .'" name="'. esc_attr($param['param_name']) .'" value="'. esc_attr($param_value) .'">';
 				if ( !empty($param_value) ) {
 			    	$image_attrs = wp_get_attachment_image_src($param_value, 'medium');
 			    	$input .= '<img src="'. esc_url($image_attrs[0]) .'" class="image-field-preview" alt="">';
@@ -1508,13 +1509,13 @@ class OllaCore	{
 				$button_verb_empty = __('Add', 'fusion');
 				$button_verb_isset = __('Edit', 'fusion');
 				$button_verb = !empty($param_value) ? $button_verb_isset : $button_verb_empty;
-				$input .= '<a href="#" class="fsn_upload_image button-secondary" data-empty="'. esc_attr($button_verb_empty) .'" data-isset="'. esc_attr($button_verb_isset) .'"><span class="button-verb">'. $button_verb .'</span> '. __('Image', 'fusion') .'</a>';
-				$input .= '<a href="#" class="fsn-remove-image button-secondary'. (empty($param_value) ? ' deactivated' : '') .'">'. __('Remove Image', 'fusion') .'</a>';
+				$input .= '<a href="#" class="olla_upload_image button-secondary" data-empty="'. esc_attr($button_verb_empty) .'" data-isset="'. esc_attr($button_verb_isset) .'"><span class="button-verb">'. $button_verb .'</span> '. __('Image', 'fusion') .'</a>';
+				$input .= '<a href="#" class="olla-remove-image button-secondary'. (empty($param_value) ? ' deactivated' : '') .'">'. __('Remove Image', 'fusion') .'</a>';
 				break;
 			case 'video':
-				$input .= '<label for="fsn_'. esc_attr($param['param_name']) .'">'. esc_html($param['label']) .'</label>';
+				$input .= '<label for="olla_'. esc_attr($param['param_name']) .'">'. esc_html($param['label']) .'</label>';
 				$input .= !empty($param['help']) ? '<p class="help-block">'. esc_html($param['help']) .'</p>' : '';
-				$input .= '<input type="hidden" class="form-control element-input'. (!empty($param['nested']) ? ' nested' : '') .'" id="fsn_'. esc_attr($param['param_name']) .'" name="'. esc_attr($param['param_name']) .'" value="'. esc_attr($param_value) .'">';
+				$input .= '<input type="hidden" class="form-control element-input'. (!empty($param['nested']) ? ' nested' : '') .'" id="olla_'. esc_attr($param['param_name']) .'" name="'. esc_attr($param['param_name']) .'" value="'. esc_attr($param_value) .'">';
 				if ( !empty($param_value) ) {
 			    	$image_attrs = wp_get_attachment_image_src($param_value, 'thumbnail', true);
 			    	$input .= '<img src="'. esc_url($image_attrs[0]) .'" class="video-field-preview" alt="">';
@@ -1522,8 +1523,8 @@ class OllaCore	{
 				$button_verb_empty = __('Add', 'fusion');
 				$button_verb_isset = __('Edit', 'fusion');
 				$button_verb = !empty($param_value) ? $button_verb_isset : $button_verb_empty;
-				$input .= '<a href="#" class="fsn_upload_video button-secondary" data-empty="'. esc_attr($button_verb_empty) .'" data-isset="'. esc_attr($button_verb_isset) .'"><span class="button-verb">'. $button_verb .'</span> '. __('Video', 'fusion') .'</a>';
-				$input .= '<a href="#" class="fsn-remove-video button-secondary'. (empty($param_value) ? ' deactivated' : '') .'">'. __('Remove Video', 'fusion') .'</a>';
+				$input .= '<a href="#" class="olla_upload_video button-secondary" data-empty="'. esc_attr($button_verb_empty) .'" data-isset="'. esc_attr($button_verb_isset) .'"><span class="button-verb">'. $button_verb .'</span> '. __('Video', 'fusion') .'</a>';
+				$input .= '<a href="#" class="olla-remove-video button-secondary'. (empty($param_value) ? ' deactivated' : '') .'">'. __('Remove Video', 'fusion') .'</a>';
 				break;
 			case 'button':
 				if (!empty($param_value)) {
@@ -1602,9 +1603,9 @@ class OllaCore	{
 				$button_verb_empty = __('Add', 'fusion');
 				$button_verb_isset = __('Edit', 'fusion');
 				$button_verb = !empty($param_value) ? $button_verb_isset : $button_verb_empty;
-				$input .= '<a href="#" class="fsn-add-edit-button button-secondary" data-empty="'. esc_attr($button_verb_empty) .'" data-isset="'. esc_attr($button_verb_isset) .'"><span class="button-verb">'. $button_verb .'</span> '. __('Button', 'fusion') .'</a>';
-				$input .= '<a href="#" class="fsn-remove-button button-secondary'. (empty($param_value) ? ' deactivated' : '') .'">'. __('Remove Button', 'fusion') .'</a>';
-				$input .= '<input type="hidden" class="form-control element-input button-string'. (!empty($param['nested']) ? ' nested' : '') .'" id="fsn_'. esc_attr($param['param_name']) .'" name="'. esc_attr($param['param_name']) .'" value="'. esc_attr($param_value) .'">';
+				$input .= '<a href="#" class="olla-add-edit-button button-secondary" data-empty="'. esc_attr($button_verb_empty) .'" data-isset="'. esc_attr($button_verb_isset) .'"><span class="button-verb">'. $button_verb .'</span> '. __('Button', 'fusion') .'</a>';
+				$input .= '<a href="#" class="olla-remove-button button-secondary'. (empty($param_value) ? ' deactivated' : '') .'">'. __('Remove Button', 'fusion') .'</a>';
+				$input .= '<input type="hidden" class="form-control element-input button-string'. (!empty($param['nested']) ? ' nested' : '') .'" id="olla_'. esc_attr($param['param_name']) .'" name="'. esc_attr($param['param_name']) .'" value="'. esc_attr($param_value) .'">';
 				break;
 			case 'box':
 				if (!empty($param_value)) {
@@ -1616,25 +1617,25 @@ class OllaCore	{
 				}
 				$input .= '<label>'. esc_html($param['label']) .'</label>';
 				$input .= !empty($param['help']) ? '<p class="help-block">'. esc_html($param['help']) .'</p>' : '';
-				$input .= '<div class="fsn-box-form">';
-					$input .= '<label for="fsn_'. esc_attr($param['param_name']) .'_top">'. __('Top', 'fusion') .'</label>';
-					$input .= '<input type="text" class="form-control box-top" id="fsn_'. esc_attr($param['param_name']) .'_top" name="'. esc_attr($param['param_name']) .'_top" value="'. (!empty($box_top) ? esc_attr($box_top) : '') .'">';
-					$input .= '<label for="fsn_'. esc_attr($param['param_name']) .'_right">'. __('Right', 'fusion') .'</label>';
-					$input .= '<input type="text" class="form-control box-right" id="fsn_'. esc_attr($param['param_name']) .'_right" name="'. esc_attr($param['param_name']) .'_right" value="'. (!empty($box_right) ? esc_attr($box_right) : '') .'">';
-					$input .= '<label for="fsn_'. esc_attr($param['param_name']) .'_bottom">'. __('Bottom', 'fusion') .'</label>';
-					$input .= '<input type="text" class="form-control box-bottom" id="fsn_'. esc_attr($param['param_name']) .'_bottom" name="'. esc_attr($param['param_name']) .'_bottom" value="'. (!empty($box_bottom) ? esc_attr($box_bottom) : '') .'">';
-					$input .= '<label for="fsn_'. esc_attr($param['param_name']) .'_left">'. __('Left', 'fusion') .'</label>';
-					$input .= '<input type="text" class="form-control box-left" id="fsn_'. esc_attr($param['param_name']) .'_left" name="'. esc_attr($param['param_name']) .'_left" value="'. (!empty($box_left) ? esc_attr($box_left) : '') .'">';
+				$input .= '<div class="olla-box-form">';
+					$input .= '<label for="olla_'. esc_attr($param['param_name']) .'_top">'. __('Top', 'fusion') .'</label>';
+					$input .= '<input type="text" class="form-control box-top" id="olla_'. esc_attr($param['param_name']) .'_top" name="'. esc_attr($param['param_name']) .'_top" value="'. (!empty($box_top) ? esc_attr($box_top) : '') .'">';
+					$input .= '<label for="olla_'. esc_attr($param['param_name']) .'_right">'. __('Right', 'fusion') .'</label>';
+					$input .= '<input type="text" class="form-control box-right" id="olla_'. esc_attr($param['param_name']) .'_right" name="'. esc_attr($param['param_name']) .'_right" value="'. (!empty($box_right) ? esc_attr($box_right) : '') .'">';
+					$input .= '<label for="olla_'. esc_attr($param['param_name']) .'_bottom">'. __('Bottom', 'fusion') .'</label>';
+					$input .= '<input type="text" class="form-control box-bottom" id="olla_'. esc_attr($param['param_name']) .'_bottom" name="'. esc_attr($param['param_name']) .'_bottom" value="'. (!empty($box_bottom) ? esc_attr($box_bottom) : '') .'">';
+					$input .= '<label for="olla_'. esc_attr($param['param_name']) .'_left">'. __('Left', 'fusion') .'</label>';
+					$input .= '<input type="text" class="form-control box-left" id="olla_'. esc_attr($param['param_name']) .'_left" name="'. esc_attr($param['param_name']) .'_left" value="'. (!empty($box_left) ? esc_attr($box_left) : '') .'">';
 				$input .= '</div>';
-				$input .= '<input type="hidden" class="form-control element-input box-string'. (!empty($param['nested']) ? ' nested' : '') .'" id="fsn_'. esc_attr($param['param_name']) .'" name="'. esc_attr($param['param_name']) .'" value="'. esc_attr($param_value) .'">';
+				$input .= '<input type="hidden" class="form-control element-input box-string'. (!empty($param['nested']) ? ' nested' : '') .'" id="olla_'. esc_attr($param['param_name']) .'" name="'. esc_attr($param['param_name']) .'" value="'. esc_attr($param_value) .'">';
 				break;
 			case 'note':
-				$input .= !empty($param['label']) ? '<h3 class="fsn-element-note-heading">'. esc_html($param['label']) .'</h3>' : '';
-				$input .= !empty($param['help']) ? '<p class="fsn-element-note-description description">'. esc_html($param['help']) .'</p>' : '';
+				$input .= !empty($param['label']) ? '<h3 class="olla-element-note-heading">'. esc_html($param['label']) .'</h3>' : '';
+				$input .= !empty($param['help']) ? '<p class="olla-element-note-description description">'. esc_html($param['help']) .'</p>' : '';
 				break;
 		}
 
-		$input = apply_filters('fsn_input_types', $input, $param, $param_value);
+		$input = apply_filters('olla_input_types', $input, $param, $param_value);
 
 		return $input;
 	}
@@ -1650,7 +1651,7 @@ class OllaCore	{
 
 	public function update_image_preview() {
 		//verify nonce
-		check_ajax_referer( 'fsn-admin-edit', 'security' );
+		check_ajax_referer( 'olla-admin-edit', 'security' );
 
 		//verify capabilities
 		if (!empty($_POST['post_id'])) {
@@ -1679,7 +1680,7 @@ class OllaCore	{
 
 	public function update_video_preview() {
 		//verify nonce
-		check_ajax_referer( 'fsn-admin-edit', 'security' );
+		check_ajax_referer( 'olla-admin-edit', 'security' );
 
 		//verify capabilities
 		if (!empty($_POST['post_id'])) {
@@ -1708,7 +1709,7 @@ class OllaCore	{
 
 	public function posts_search() {
 		//verify nonce
-		check_ajax_referer( 'fsn-admin-edit', 'security' );
+		check_ajax_referer( 'olla-admin-edit', 'security' );
 
 		//verify capabilities
 		if (!empty($_POST['post_id'])) {
@@ -1804,4 +1805,4 @@ class OllaCore	{
 
 }
 
-$olla_core = new OllaCore);
+$olla_core = new OllaCore();
