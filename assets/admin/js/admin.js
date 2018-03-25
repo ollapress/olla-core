@@ -10,31 +10,31 @@
  
 //init Fusion
 jQuery(document).ready(function() {
-	fsnInitUI();
-	fsnInitTinyMCE();
-	fsnInitScreenOptions();
+	ollaInitUI();
+	ollaInitTinyMCE();
+	ollaInitScreenOptions();
 });
 
-function fsnInitUI() {
-	var editorToggleBtn = jQuery('.fsn-toggle-editor');
+function ollaInitUI() {
+	var editorToggleBtn = jQuery('.olla-toggle-editor');
 	var defaultEditor = jQuery('#postdivrich');
-	var fsnEditor = jQuery('.fsn-editor');
-	defaultEditor.addClass('fsn-off');
+	var ollaEditor = jQuery('.olla-editor');
+	defaultEditor.addClass('olla-off');
 	editorToggleBtn.on('click', function(e) {
 		e.preventDefault();
-		defaultEditor.add(fsnEditor).add(editorToggleBtn).toggleClass('fsn-off');
+		defaultEditor.add(ollaEditor).add(editorToggleBtn).toggleClass('olla-off');
 		jQuery(window).trigger('scroll');
 		jQuery(window).trigger('resize');
 	});
 
-	var interfaceGrid = jQuery('.fsn-interface-grid');
+	var interfaceGrid = jQuery('.olla-interface-grid');
 	if (interfaceGrid.is(':empty')) {
-		var fsnInitContent = fsnGetRow(fsnGetColumn(12, fsnGetElement('fsn_text', fsnL10n.text_label)));
-		interfaceGrid.empty().append(fsnInitContent);
+		var ollaInitContent = ollaGetRow(ollaGetColumn(12, ollaGetElement('olla_text', ollaL10n.text_label)));
+		interfaceGrid.empty().append(ollaInitContent);
 	} else if (interfaceGrid.children().first().hasClass('row-container') === false) {
 		var initalContent = interfaceGrid.html();
-		var fsnInitContent = fsnGetRow(fsnGetColumn(12, fsnGetElement('fsn_text', fsnL10n.text_label, initalContent)));
-		interfaceGrid.empty().append(fsnInitContent);
+		var ollaInitContent = ollaGetRow(ollaGetColumn(12, ollaGetElement('olla_text', ollaL10n.text_label, initalContent)));
+		interfaceGrid.empty().append(ollaInitContent);
 		editorToggleBtn.trigger('click');
 	}
 	//prevent scroll to top on first action
@@ -43,10 +43,10 @@ function fsnInitUI() {
 	});
 	
 	//init events
-	fsnInitUIevents(interfaceGrid);
+	ollaInitUIevents(interfaceGrid);
 }
 
-function fsnInitTinyMCE() {
+function ollaInitTinyMCE() {
 	//init TinyMCE if needed
 	var userEditorSetting = getUserSetting('editor');
 	if (userEditorSetting == 'html') {
@@ -61,36 +61,36 @@ function fsnInitTinyMCE() {
 	}
 }
 
-function fsnInitScreenOptions() {
-	var interfaceGrid = jQuery('.fsn-interface-grid');
-	var tooltipToggle = jQuery('#screen-meta').on('change', '#fsn_disable_tooltips', function(event) {
+function ollaInitScreenOptions() {
+	var interfaceGrid = jQuery('.olla-interface-grid');
+	var tooltipToggle = jQuery('#screen-meta').on('change', '#olla_disable_tooltips', function(event) {
 		if (jQuery(this).is(':checked')) {
-			window.setUserSetting('fsn_disable_tooltips', 'on');
-			fsnDestroyTooltips(interfaceGrid);
+			window.setUserSetting('olla_disable_tooltips', 'on');
+			ollaDestroyTooltips(interfaceGrid);
 		} else {
-			window.deleteUserSetting('fsn_disable_tooltips');
-			fsnInitTooltips(interfaceGrid, true);
+			window.deleteUserSetting('olla_disable_tooltips');
+			ollaInitTooltips(interfaceGrid, true);
 		}
 	});
 }
 
 //init tooltips
-function fsnInitTooltips(instance, cols) {
-	if (getUserSetting('fsn_disable_tooltips') !== 'on') {
-		var targets = instance.find('.fsn-add-row, .fsn-add-element, .fsn-add-tab, .row-controls-toggle, .column-controls-toggle, .tabs-controls-toggle, .tab-controls-toggle, .element-controls-toggle, .control-icon');
+function ollaInitTooltips(instance, cols) {
+	if (getUserSetting('olla_disable_tooltips') !== 'on') {
+		var targets = instance.find('.olla-add-row, .olla-add-element, .olla-add-tab, .row-controls-toggle, .column-controls-toggle, .tabs-controls-toggle, .tab-controls-toggle, .element-controls-toggle, .control-icon');
 		if (cols === true) {
-			var targets = targets.add(instance.find('.fsn-add-col'));
+			var targets = targets.add(instance.find('.olla-add-col'));
 		}
 		targets.each(function() {
 			var target = jQuery(this);
 			if (target.tooltip('instance') === undefined) {
-				if (target.hasClass('fsn-add-col') || target.hasClass('fsn-add-element')) {
+				if (target.hasClass('olla-add-col') || target.hasClass('olla-add-element')) {
 					var tooltipPosition = { my: 'center-1 bottom-19', at: 'center center' };
 				} else {
 					var tooltipPosition = { my: 'center-1 bottom-9', at: 'center top' };
 				}
 				target.tooltip({
-					tooltipClass: 'fsn-tooltip',
+					tooltipClass: 'olla-tooltip',
 					position: tooltipPosition,
 					show: false,
 					hide: false
@@ -101,8 +101,8 @@ function fsnInitTooltips(instance, cols) {
 }
 
 //destroy tooltips
-function fsnDestroyTooltips(instance) {
-	var targets = instance.find('.fsn-add-row, .fsn-add-col, .fsn-add-element, .fsn-add-tab, .row-controls-toggle, .column-controls-toggle, .tabs-controls-toggle, .tab-controls-toggle, .element-controls-toggle, .control-icon');
+function ollaDestroyTooltips(instance) {
+	var targets = instance.find('.olla-add-row, .olla-add-col, .olla-add-element, .olla-add-tab, .row-controls-toggle, .column-controls-toggle, .tabs-controls-toggle, .tab-controls-toggle, .element-controls-toggle, .control-icon');
 	targets.each(function() {
 		var target = jQuery(this);
 		try {		
@@ -112,41 +112,41 @@ function fsnDestroyTooltips(instance) {
 }
 
 //get new row
-function fsnGetRow(content) {
+function ollaGetRow(content) {
 	if (content == undefined) {
 		var content = '';
 	}
-	var output = '<div class="row-container clearfix"><div class="row-header"><div class="row-controls"><span class="row-controls-toggle" title="'+ fsnL10n.row_options +'"><i class="material-icons md-18">&#xE5D3;</i></span><div class="row-controls-dropdown collapsed"><a href="#" class="edit-row">'+ fsnL10n.edit +'</a><a href="#" class="duplicate-row">'+ fsnL10n.duplicate +'</a><hr><a href="#" class="move-row" data-move="up">'+ fsnL10n.move_up +'</a><a href="#" class="move-row" data-move="down">'+ fsnL10n.move_down +'</a><a href="#" class="move-row" data-move="top">'+ fsnL10n.move_top +'</a><a href="#" class="move-row" data-move="bottom">'+ fsnL10n.move_bottom +'</a><hr><a href="#" class="delete-row">'+ fsnL10n.delete +'</a></div><a href="#" class="control-icon edit-row" title="'+ fsnL10n.row_edit +'"><i class="material-icons md-18">&#xE3C9;</i></a></div><a href="#" class="fsn-add-row" title="'+ fsnL10n.row_add +'"><i class="material-icons md-18">&#xE147;</i></a></div><div class="row-wrapper"><div class="row">'+ content +'</div></div></div>';
+	var output = '<div class="row-container clearfix"><div class="row-header"><div class="row-controls"><span class="row-controls-toggle" title="'+ ollaL10n.row_options +'"><i class="material-icons md-18">&#xE5D3;</i></span><div class="row-controls-dropdown collapsed"><a href="#" class="edit-row">'+ ollaL10n.edit +'</a><a href="#" class="duplicate-row">'+ ollaL10n.duplicate +'</a><hr><a href="#" class="move-row" data-move="up">'+ ollaL10n.move_up +'</a><a href="#" class="move-row" data-move="down">'+ ollaL10n.move_down +'</a><a href="#" class="move-row" data-move="top">'+ ollaL10n.move_top +'</a><a href="#" class="move-row" data-move="bottom">'+ ollaL10n.move_bottom +'</a><hr><a href="#" class="delete-row">'+ ollaL10n.delete +'</a></div><a href="#" class="control-icon edit-row" title="'+ ollaL10n.row_edit +'"><i class="material-icons md-18">&#xE3C9;</i></a></div><a href="#" class="olla-add-row" title="'+ ollaL10n.row_add +'"><i class="material-icons md-18">&#xE147;</i></a></div><div class="row-wrapper"><div class="row">'+ content +'</div></div></div>';
 	return output;
 }
 
 //get new column
-function fsnGetColumn(colsize, content) {
+function ollaGetColumn(colsize, content) {
 	if (content == undefined) {
 		var content = '';
 	}
-	var output = '<div class="col-sm-'+ colsize +'" data-width="'+ colsize +'"><div class="column-container clearfix"><div class="column-header"><div class="column-controls"><span class="column-controls-toggle" title="'+ fsnL10n.column_options +'"><i class="material-icons md-18">&#xE5D3;</i></span><div class="column-controls-dropdown collapsed"><a href="#" class="edit-col">'+ fsnL10n.edit +'</a><a href="#" class="delete-col">'+ fsnL10n.delete +'</a></div><a href="#" class="control-icon edit-col" title="'+ fsnL10n.column_edit +'"><i class="material-icons md-18">&#xE3C9;</i></a></div><h3 class="column-title"><span class="column-width">'+ colsize +'</span> / 12</h3></div><div class="column-wrapper">'+ content +'</div><a href="#" class="fsn-add-element" data-container="column" title="'+ fsnL10n.element_add +'"><i class="material-icons md-18">&#xE147;</i></a></div></div>';
+	var output = '<div class="col-sm-'+ colsize +'" data-width="'+ colsize +'"><div class="column-container clearfix"><div class="column-header"><div class="column-controls"><span class="column-controls-toggle" title="'+ ollaL10n.column_options +'"><i class="material-icons md-18">&#xE5D3;</i></span><div class="column-controls-dropdown collapsed"><a href="#" class="edit-col">'+ ollaL10n.edit +'</a><a href="#" class="delete-col">'+ ollaL10n.delete +'</a></div><a href="#" class="control-icon edit-col" title="'+ ollaL10n.column_edit +'"><i class="material-icons md-18">&#xE3C9;</i></a></div><h3 class="column-title"><span class="column-width">'+ colsize +'</span> / 12</h3></div><div class="column-wrapper">'+ content +'</div><a href="#" class="olla-add-element" data-container="column" title="'+ ollaL10n.element_add +'"><i class="material-icons md-18">&#xE147;</i></a></div></div>';
 	return output;
 }
 
 //get new tabs
-function fsnGetTabs(content) {
+function ollaGetTabs(content) {
 	if (content == undefined) {
 		var content = '';
 	}
-	var tab1ID = fsnUniqid('tab-');
-	var tab2ID = fsnUniqid('tab-');
-	var output = '<div class="tabs-container"><div class="tabs-header"><div class="tabs-controls"><span class="tabs-controls-toggle" title="'+ fsnL10n.tabs_options +'"><i class="material-icons md-18">&#xE5D3;</i></span><div class="tabs-controls-dropdown collapsed"><a href="#" class="edit-tabs">'+ fsnL10n.edit +'</a><a href="#" class="duplicate-tabs">'+ fsnL10n.duplicate +'</a><a href="#" class="delete-tabs">'+ fsnL10n.delete +'</a></div><a href="#" class="control-icon edit-tabs" title="'+ fsnL10n.tabs_edit +'"><i class="material-icons md-18">&#xE3C9;</i></a></div><h3 class="tabs-title">'+ fsnL10n.tabs_title +'</h3></div><div class="tabs-wrapper"><div class="tabs-nav"><ul class="nav nav-tabs"><li class="active"><a href="#'+ tab1ID +'" data-toggle="tab">'+ fsnL10n.tab_1_title +'</a></li><li><a href="#'+ tab2ID +'" data-toggle="tab">'+ fsnL10n.tab_2_title +'</a></li><li><a href="#" class="fsn-add-tab" title="'+ fsnL10n.tab_add +'"><i class="material-icons md-18">&#xE147;</i></a></li></ul></div><div class="tab-content">'+ fsnGetTab(fsnL10n.tab_1_title, tab1ID, true) + fsnGetTab(fsnL10n.tab_2_title, tab2ID) +'</div></div></div>';
+	var tab1ID = ollaUniqid('tab-');
+	var tab2ID = ollaUniqid('tab-');
+	var output = '<div class="tabs-container"><div class="tabs-header"><div class="tabs-controls"><span class="tabs-controls-toggle" title="'+ ollaL10n.tabs_options +'"><i class="material-icons md-18">&#xE5D3;</i></span><div class="tabs-controls-dropdown collapsed"><a href="#" class="edit-tabs">'+ ollaL10n.edit +'</a><a href="#" class="duplicate-tabs">'+ ollaL10n.duplicate +'</a><a href="#" class="delete-tabs">'+ ollaL10n.delete +'</a></div><a href="#" class="control-icon edit-tabs" title="'+ ollaL10n.tabs_edit +'"><i class="material-icons md-18">&#xE3C9;</i></a></div><h3 class="tabs-title">'+ ollaL10n.tabs_title +'</h3></div><div class="tabs-wrapper"><div class="tabs-nav"><ul class="nav nav-tabs"><li class="active"><a href="#'+ tab1ID +'" data-toggle="tab">'+ ollaL10n.tab_1_title +'</a></li><li><a href="#'+ tab2ID +'" data-toggle="tab">'+ ollaL10n.tab_2_title +'</a></li><li><a href="#" class="olla-add-tab" title="'+ ollaL10n.tab_add +'"><i class="material-icons md-18">&#xE147;</i></a></li></ul></div><div class="tab-content">'+ ollaGetTab(ollaL10n.tab_1_title, tab1ID, true) + ollaGetTab(ollaL10n.tab_2_title, tab2ID) +'</div></div></div>';
 	return output;
 }
 
 //get new tab
-function fsnGetTab(title, tabID, active, content) {
+function ollaGetTab(title, tabID, active, content) {
 	if (title == undefined)	{
 		var title = 'Tab';
 	}
 	if (tabID == undefined) {
-		var tabID = fsnUniqid('tab-');
+		var tabID = ollaUniqid('tab-');
 	}
 	if (active == undefined)	{
 		var active = false;
@@ -154,16 +154,16 @@ function fsnGetTab(title, tabID, active, content) {
 	if (content == undefined) {
 		var content = '';
 	}
-	var output = '<div class="tab-pane'+ (active === true ? ' active' : '') +'" id="'+ tabID +'"><div class="tab-container" data-tab-title="'+ title +'" data-tab-id="'+ tabID +'"><div class="tab-header"><div class="tab-controls"><span class="tab-controls-toggle" title="'+ fsnL10n.tab_options +'"><i class="material-icons md-18">&#xE5D3;</i></span><div class="tab-controls-dropdown collapsed"><a href="#" class="edit-tab">'+ fsnL10n.edit +'</a><a href="#" class="duplicate-tab">'+ fsnL10n.duplicate +'</a><a href="#" class="delete-tab">'+ fsnL10n.delete +'</a></div><a href="#" class="control-icon edit-tab" title="'+ fsnL10n.tab_edit +'"><i class="material-icons md-18">&#xE3C9;</i></a></div></div><div class="tab-wrapper"><div class="tab">'+ content +'</div></div><a href="#" class="fsn-add-element" data-container="tab" title="'+ fsnL10n.element_add +'"><i class="material-icons md-18">&#xE147;</i></a></div></div>';
+	var output = '<div class="tab-pane'+ (active === true ? ' active' : '') +'" id="'+ tabID +'"><div class="tab-container" data-tab-title="'+ title +'" data-tab-id="'+ tabID +'"><div class="tab-header"><div class="tab-controls"><span class="tab-controls-toggle" title="'+ ollaL10n.tab_options +'"><i class="material-icons md-18">&#xE5D3;</i></span><div class="tab-controls-dropdown collapsed"><a href="#" class="edit-tab">'+ ollaL10n.edit +'</a><a href="#" class="duplicate-tab">'+ ollaL10n.duplicate +'</a><a href="#" class="delete-tab">'+ ollaL10n.delete +'</a></div><a href="#" class="control-icon edit-tab" title="'+ ollaL10n.tab_edit +'"><i class="material-icons md-18">&#xE3C9;</i></a></div></div><div class="tab-wrapper"><div class="tab">'+ content +'</div></div><a href="#" class="olla-add-element" data-container="tab" title="'+ ollaL10n.element_add +'"><i class="material-icons md-18">&#xE147;</i></a></div></div>';
 	return output;
 }
 
 //get new element
-function fsnGetElement(type, name, content) {
+function ollaGetElement(type, name, content) {
 	if (content == undefined || content === '<br />\n') {
 		var content = '';		
 	}
-	var output = '<div class="fsn-element '+ type +'" data-shortcode-tag="'+ type +'"><div class="element-controls"><span class="element-controls-toggle" title="'+ fsnL10n.element_options +'"><i class="material-icons md-18">&#xE5D3;</i></span><div class="element-controls-dropdown collapsed"><a href="#" class="edit-element">'+ fsnL10n.edit +'</a><a href="#" class="duplicate-element">'+ fsnL10n.duplicate +'</a><a href="#" class="delete-element">'+ fsnL10n.delete +'</a></div><a href="#" class="control-icon edit-element" title="'+ fsnL10n.element_edit +'"><i class="material-icons md-18">&#xE3C9;</i></a></div><div class="element-label" title="'+ name +'">'+ name +'</div><div class="element-text-holder">'+ content +'</div></div>';
+	var output = '<div class="olla-element '+ type +'" data-shortcode-tag="'+ type +'"><div class="element-controls"><span class="element-controls-toggle" title="'+ ollaL10n.element_options +'"><i class="material-icons md-18">&#xE5D3;</i></span><div class="element-controls-dropdown collapsed"><a href="#" class="edit-element">'+ ollaL10n.edit +'</a><a href="#" class="duplicate-element">'+ ollaL10n.duplicate +'</a><a href="#" class="delete-element">'+ ollaL10n.delete +'</a></div><a href="#" class="control-icon edit-element" title="'+ ollaL10n.element_edit +'"><i class="material-icons md-18">&#xE3C9;</i></a></div><div class="element-label" title="'+ name +'">'+ name +'</div><div class="element-text-holder">'+ content +'</div></div>';
 	return output;		
 }
 
@@ -181,7 +181,7 @@ jQuery(document).ready(function() {
 	});
 });
 
-function fsnCloseDropdowns(trigger, target) {
+function ollaCloseDropdowns(trigger, target) {
 	var triggers = jQuery('.row-controls-toggle, .column-controls-toggle, .tabs-controls-toggle, .tab-controls-toggle, .element-controls-toggle, .template-controls-toggle');
 	var targets = jQuery('.row-controls-dropdown, .column-controls-dropdown, .tabs-controls-dropdown, .tab-controls-dropdown, .element-controls-dropdown, .template-controls-dropdown');
 	triggers.not(trigger).removeClass('open');
@@ -189,11 +189,11 @@ function fsnCloseDropdowns(trigger, target) {
 }
 
 //instance events
-function fsnInitUIevents(instance) {
+function ollaInitUIevents(instance) {
 	
 	//get instance parent
-	if (instance.attr('id') == 'fsn-main-ui') {
-		instanceParent = jQuery('.fsn-editor');
+	if (instance.attr('id') == 'olla-main-ui') {
+		instanceParent = jQuery('.olla-editor');
 	} else {
 		instanceParent = jQuery('#edit_component');
 	}
@@ -203,7 +203,7 @@ function fsnInitUIevents(instance) {
 		e.stopPropagation();
 		var trigger = jQuery(this);
 		var target = trigger.next('.row-controls-dropdown');
-		fsnCloseDropdowns(trigger, target);
+		ollaCloseDropdowns(trigger, target);
 		trigger.toggleClass('open');
 		target.toggleClass('collapsed');
 	});
@@ -213,7 +213,7 @@ function fsnInitUIevents(instance) {
 		e.stopPropagation();
 		var trigger = jQuery(this);
 		var target = trigger.next('.column-controls-dropdown');
-		fsnCloseDropdowns(trigger, target);
+		ollaCloseDropdowns(trigger, target);
 		trigger.toggleClass('open');
 		target.toggleClass('collapsed');
 	});
@@ -223,7 +223,7 @@ function fsnInitUIevents(instance) {
 		e.stopPropagation();
 		var trigger = jQuery(this);
 		var target = trigger.next('.tabs-controls-dropdown');
-		fsnCloseDropdowns(trigger, target);
+		ollaCloseDropdowns(trigger, target);
 		trigger.toggleClass('open');
 		target.toggleClass('collapsed');
 	});
@@ -233,7 +233,7 @@ function fsnInitUIevents(instance) {
 		e.stopPropagation();
 		var trigger = jQuery(this);
 		var target = trigger.next('.tab-controls-dropdown');
-		fsnCloseDropdowns(trigger, target);
+		ollaCloseDropdowns(trigger, target);
 		trigger.toggleClass('open');
 		target.toggleClass('collapsed');
 	});
@@ -242,8 +242,8 @@ function fsnInitUIevents(instance) {
 	instance.on('shown.bs.tab', 'a[data-toggle="tab"]', function(e) {
 		var incomingTab = e.target // newly activated tab
 		var outgoingTab = e.relatedTarget // previous active tab
-		fsnAddColFields(instance);
-		fsnResize();
+		ollaAddColFields(instance);
+		ollaResize();
 	});
 	
 	//toggle element controls
@@ -251,30 +251,30 @@ function fsnInitUIevents(instance) {
 		e.stopPropagation();
 		var trigger = jQuery(this);
 		var target = trigger.next('.element-controls-dropdown');
-		fsnCloseDropdowns(trigger, target);
+		ollaCloseDropdowns(trigger, target);
 		trigger.toggleClass('open');
 		target.toggleClass('collapsed');
 	});
 	
 	//add row to visual editor
-	instanceParent.on('click', '.fsn-add-row', function(e) {
+	instanceParent.on('click', '.olla-add-row', function(e) {
 		e.preventDefault();
 		var trigger = jQuery(this);
 		try {
 			trigger.tooltip('close');
 		} catch(err) {}
-		//add row to fusion interface
-		var rowContent = fsnGetRow();
+		//add row to olla interface
+		var rowContent = ollaGetRow();
 		trigger.closest('.row-container').after(rowContent);		
 		//reinit sortables and resizables
 		initSortables(instance);
 		initResizables(instance);
 		//reinit add col fields
-		fsnAddColFields(instance);
+		ollaAddColFields(instance);
 		//init tooltips
-		fsnInitTooltips(instance);
+		ollaInitTooltips(instance);
 		//update content
-		fsnUpdateContent(instance);
+		ollaUpdateContent(instance);
 	});
 	
 	//delete row from visual editor
@@ -284,17 +284,17 @@ function fsnInitUIevents(instance) {
 		targetRow.fadeOut(400, function() {
 			jQuery(this).remove();
 			//update content
-			fsnUpdateContent(instance);
+			ollaUpdateContent(instance);
 			if (instance.is(':empty')) {
-				var fsnInitContent = fsnGetRow(fsnGetColumn(12, fsnGetElement('fsn_text', fsnL10n.text_label)));
-				instance.empty().append(fsnInitContent);
+				var ollaInitContent = ollaGetRow(ollaGetColumn(12, ollaGetElement('olla_text', ollaL10n.text_label)));
+				instance.empty().append(ollaInitContent);
 				//reinit sortables and resizables
 				initSortables(instance);
 				initResizables(instance);
 				//reinit add col fields
-				fsnAddColFields(instance);
+				ollaAddColFields(instance);
 				//init tooltips
-				fsnInitTooltips(instance);
+				ollaInitTooltips(instance);
 			}
 		});
 	});
@@ -315,7 +315,7 @@ function fsnInitUIevents(instance) {
 				var navItems = newTabs.find('.nav-tabs a');
 				var tabContainers = newTabs.find('.tab-pane');
 				for (i = 0; i < tabContainers.length; i++) {
-					var newID = fsnUniqid('tab-');
+					var newID = ollaUniqid('tab-');
 					navItems.eq(i).attr('href', '#'+ newID);
 					tabContainers.eq(i).attr('id', newID);
 					tabContainers.eq(i).children('.tab-container').attr('data-tab-id', newID);
@@ -326,9 +326,9 @@ function fsnInitUIevents(instance) {
 		initSortables(instance);
 		initResizables(instance);
 		//init tooltips
-		fsnInitTooltips(instance);
+		ollaInitTooltips(instance);
 		//update content
-		fsnUpdateContent(instance);
+		ollaUpdateContent(instance);
 	});
 	
 	//move row in visual editor
@@ -364,18 +364,18 @@ function fsnInitUIevents(instance) {
 				break;
 		}
 		//update content
-		fsnUpdateContent(instance);
+		ollaUpdateContent(instance);
 	});
 	
 	//add column to visual editor
-	fsnAddColFields(instance);
+	ollaAddColFields(instance);
 	//init tooltips
-	fsnInitTooltips(instance);
+	ollaInitTooltips(instance);
 	
-	instance.on('click', '.fsn-add-col', function() {
+	instance.on('click', '.olla-add-col', function() {
 		var addColBtn = jQuery(this);
 		var colWidth = addColBtn.attr('data-width');
-		var colData = fsnGetColumn(colWidth);
+		var colData = ollaGetColumn(colWidth);
 		//if this is an offset placeholder
 		var nextItem = addColBtn.nextAll('[class*="col-"]').not('.ui-sortable-placeholder').first();
 		if (nextItem.length > 0) {
@@ -391,11 +391,11 @@ function fsnInitUIevents(instance) {
 		//reinit sortables and resizables
 		initSortables(instance);
 		initResizables(instance);
-		fsnResize();
+		ollaResize();
 		//init tooltips
-		fsnInitTooltips(instance);
+		ollaInitTooltips(instance);
 		//update content
-		fsnUpdateContent(instance);
+		ollaUpdateContent(instance);
 	});
 	
 	//delete column from visual editor
@@ -421,9 +421,9 @@ function fsnInitUIevents(instance) {
 		}
 		targetCol.remove();
 		//reinit add col fields
-		fsnAddColFields(instance);
+		ollaAddColFields(instance);
 		//refenerate content
-		fsnUpdateContent(instance);	
+		ollaUpdateContent(instance);	
 	});
 	
 	//delete tabs from visual editor
@@ -433,7 +433,7 @@ function fsnInitUIevents(instance) {
 		targetTabs.fadeOut(400, function() {
 			jQuery(this).remove();
 			//update content
-			fsnUpdateContent(instance);
+			ollaUpdateContent(instance);
 		});
 	});
 	
@@ -449,7 +449,7 @@ function fsnInitUIevents(instance) {
 		var navItems = newTabs.find('.nav-tabs a');
 		var tabContainers = newTabs.find('.tab-pane');
 		for (i = 0; i < tabContainers.length; i++) {
-			var newID = fsnUniqid('tab-');
+			var newID = ollaUniqid('tab-');
 			navItems.eq(i).attr('href', '#'+ newID);
 			tabContainers.eq(i).attr('id', newID);
 			tabContainers.eq(i).children('.tab-container').attr('data-tab-id', newID);
@@ -458,13 +458,13 @@ function fsnInitUIevents(instance) {
 		initSortables(instance);
 		initResizables(instance);
 		//init tooltips
-		fsnInitTooltips(instance);
+		ollaInitTooltips(instance);
 		//update content
-		fsnUpdateContent(instance);
+		ollaUpdateContent(instance);
 	});
 	
 	//add tab in visual editor
-	instance.on('click', '.fsn-add-tab', function(e) {
+	instance.on('click', '.olla-add-tab', function(e) {
 		e.preventDefault();
 		var trigger = jQuery(this);
 		try {
@@ -472,17 +472,17 @@ function fsnInitUIevents(instance) {
 		} catch(err) {}
 		var tabsNav = trigger.closest('.nav-tabs');
 		var targetTabs = trigger.closest('.tabs-container');
-		var newTabID = fsnUniqid('tab-');
-		var newTab = fsnGetTab(fsnL10n.tab_new, newTabID, true);
+		var newTabID = ollaUniqid('tab-');
+		var newTab = ollaGetTab(ollaL10n.tab_new, newTabID, true);
 		targetTabs.find('.tab-content').append(newTab);
-		trigger.parent('li').before('<li><a href="#'+ newTabID +'" data-toggle="tab">'+ fsnL10n.tab_new +'</a></li>');
+		trigger.parent('li').before('<li><a href="#'+ newTabID +'" data-toggle="tab">'+ ollaL10n.tab_new +'</a></li>');
 		//reinit sortables and resizables
 		initSortables(instance);
 		initResizables(instance);
 		//init tooltips
-		fsnInitTooltips(instance);
+		ollaInitTooltips(instance);
 		//update content
-		fsnUpdateContent(instance);
+		ollaUpdateContent(instance);
 		//target new tab
 		trigger.trigger('blur');
 		tabsNav.find('li').has('a[data-toggle="tab"]').last().find('a').trigger('click');
@@ -501,7 +501,7 @@ function fsnInitUIevents(instance) {
 		}
 		targetTab.add(tabNavItem).remove();
 		//update content
-		fsnUpdateContent(instance);
+		ollaUpdateContent(instance);
 		tabSelect.children('a').trigger('click');
 	});
 	
@@ -517,7 +517,7 @@ function fsnInitUIevents(instance) {
 		var tabsNav = targetTab.closest('.tabs-wrapper').find('.nav-tabs');
 		var newTab = targetTab.next('.tab-pane');
 		var newTabTitle = newTab.find('.tab-container').attr('data-tab-title');
-		var newID = fsnUniqid('tab-');
+		var newID = ollaUniqid('tab-');
 		newTab.attr('id', newID);
 		newTab.children('.tab-container').attr('data-tab-id',newID);
 		tabsNav.find('li').has('a[href="#'+ targetTabID +'"]').after('<li><a href="#'+ newID +'" data-toggle="tab">'+ newTabTitle +'</a></li>');
@@ -525,9 +525,9 @@ function fsnInitUIevents(instance) {
 		initSortables(instance);
 		initResizables(instance);
 		//init tooltips
-		fsnInitTooltips(instance);
+		ollaInitTooltips(instance);
 		//update content
-		fsnUpdateContent(instance);
+		ollaUpdateContent(instance);
 		//target new tab
 		tabsNav.find('li').has('a[href="#'+ newID +'"]').find('a').trigger('click');
 	});
@@ -535,25 +535,25 @@ function fsnInitUIevents(instance) {
 	//delete element from visual editor
 	instance.on('click', '.delete-element', function(e) {
 		e.preventDefault();
-		var targetElement = jQuery(this).closest('.fsn-element');
+		var targetElement = jQuery(this).closest('.olla-element');
 		targetElement.fadeOut(400, function() {
 			jQuery(this).remove();
 			//refenerate content
-			fsnUpdateContent(instance);
+			ollaUpdateContent(instance);
 		});
 	});
 	
 	//duplicate element in visual editor
 	instance.on('click', '.duplicate-element', function(e) {
 		e.preventDefault();
-		var targetElement = jQuery(this).closest('.fsn-element');
+		var targetElement = jQuery(this).closest('.olla-element');
 		var targetElementData = targetElement.clone();
 		targetElement.after(targetElementData);
 		//reinit sortables and resizables
 		initSortables(instance);
 		initResizables(instance);
 		//update content
-		fsnUpdateContent(instance);
+		ollaUpdateContent(instance);
 	});
 	
 	//sortables
@@ -566,7 +566,7 @@ function fsnInitUIevents(instance) {
 	initResizables(instance);
 	
 	//add element
-	instance.on('click', '.fsn-add-element', function(e) {
+	instance.on('click', '.olla-add-element', function(e) {
 		e.preventDefault();
 		var trigger = jQuery(this);
 		try {
@@ -600,11 +600,11 @@ function fsnInitUIevents(instance) {
 			nesting_level: nestingLevel,
 			tabs_nesting_level: tabsNestingLevel,
 			post_id: postID,
-			security: fsnJS.fsnEditNonce
+			security: ollaJS.ollaEditNonce
 		};
 		jQuery.post(ajaxurl, data, function(response) {
 			if (response == '-1') {
-				alert(fsnL10n.error);
+				alert(ollaL10n.error);
 				return false;
 			}
 			//append modal to body
@@ -618,21 +618,21 @@ function fsnInitUIevents(instance) {
 				//add element container to column
 				var elementType = jQuery(this).attr('data-element-type');
 				var elementName = jQuery(this).find('.element-name').text();
-				//var shortcodeName = 'fsn_'+ elementType;
+				//var shortcodeName = 'olla_'+ elementType;
 				
 				switch(elementType) {
 					case 'row':
-						var rowContent = fsnGetRow();
+						var rowContent = ollaGetRow();
 						wrapper.append(rowContent);
 						//reinit add col fields
-						fsnAddColFields(instance);
+						ollaAddColFields(instance);
 						break;
 					case 'tabs':
-						var tabsContent = fsnGetTabs();
+						var tabsContent = ollaGetTabs();
 						wrapper.append(tabsContent);
 						break;					
 					default:
-						var elementContent = fsnGetElement(elementType, elementName);
+						var elementContent = ollaGetElement(elementType, elementName);
 						wrapper.append(elementContent);
 				}
 				
@@ -642,9 +642,9 @@ function fsnInitUIevents(instance) {
 				initSortables(instance);
 				initResizables(instance);
 				//init tooltips
-				fsnInitTooltips(instance);
+				ollaInitTooltips(instance);
 				//update content
-				fsnUpdateContent(instance);
+				ollaUpdateContent(instance);
 			});
 			//delete modal on hidden
 			modalSelector.on('hidden.bs.modal', function(e) {
@@ -668,11 +668,11 @@ function fsnInitUIevents(instance) {
 			action: 'edit_row_modal',
 			saved_values: dataAttributes,
 			post_id: postID,
-			security: fsnJS.fsnEditNonce
+			security: ollaJS.ollaEditNonce
 		};
 		jQuery.post(ajaxurl, data, function(response) {
 			if (response == '-1') {
-				alert(fsnL10n.error);
+				alert(ollaL10n.error);
 				return false;
 			}
 			//append modal to body
@@ -681,7 +681,7 @@ function fsnInitUIevents(instance) {
 			var modalSelector = jQuery('#editRowModal');
 			modalSelector.modal();
 			//init color pickers
-			jQuery('.fsn-color-picker').wpColorPicker();
+			jQuery('.olla-color-picker').wpColorPicker();
 			//disable incompatible style params
 			var disabledSettings = modalSelector.find('input[name="margin_left"], input[name="margin_right"], input[name="margin_xs_left"], input[name="margin_xs_right"], input[name="padding_left"], input[name="padding_right"], input[name="padding_xs_left"], input[name="padding_xs_right"]');
 			disabledSettings.each(function() {
@@ -689,15 +689,15 @@ function fsnInitUIevents(instance) {
 				disabledSetting.empty().prop('disabled', true);
 			});
 			//save notice
-			fsnSaveNotice(modalSelector);
+			ollaSaveNotice(modalSelector);
 			//update row variables
 			modalSelector.on('hide.bs.modal', function(e) {
 				//update box field arrays
-				var boxFields = modalSelector.find('.fsn-box-form');
+				var boxFields = modalSelector.find('.olla-box-form');
 				if (boxFields.length > 0) {
 					jQuery(boxFields).each(function() {
 						var boxField = jQuery(this);
-						fsnUpdateBoxField(boxField);
+						ollaUpdateBoxField(boxField);
 					});
 				}
 				//loop through form fields and update data attributes
@@ -740,7 +740,7 @@ function fsnInitUIevents(instance) {
 					}
 				});
 				//refenerate content
-				fsnUpdateContent(instance);
+				ollaUpdateContent(instance);
 			});
 			//delete modal on hidden
 			modalSelector.on('hidden.bs.modal', function(e) {
@@ -764,11 +764,11 @@ function fsnInitUIevents(instance) {
 			action: 'edit_column_modal',
 			saved_values: dataAttributes,
 			post_id: postID,
-			security: fsnJS.fsnEditNonce
+			security: ollaJS.ollaEditNonce
 		};
 		jQuery.post(ajaxurl, data, function(response) {
 			if (response == '-1') {
-				alert(fsnL10n.error);
+				alert(ollaL10n.error);
 				return false;
 			}
 			//append modal to body
@@ -777,17 +777,17 @@ function fsnInitUIevents(instance) {
 			var modalSelector = jQuery('#editColModal');
 			modalSelector.modal();
 			//init color pickers
-			jQuery('.fsn-color-picker').wpColorPicker();
+			jQuery('.olla-color-picker').wpColorPicker();
 			//save notice
-			fsnSaveNotice(modalSelector);
+			ollaSaveNotice(modalSelector);
 			//update column variables
 			modalSelector.on('hide.bs.modal', function(e) {
 				//update box field arrays
-				var boxFields = modalSelector.find('.fsn-box-form');
+				var boxFields = modalSelector.find('.olla-box-form');
 				if (boxFields.length > 0) {
 					jQuery(boxFields).each(function() {
 						var boxField = jQuery(this);
-						fsnUpdateBoxField(boxField);
+						ollaUpdateBoxField(boxField);
 					});
 				}
 				//loop through form fields and update data attributes
@@ -830,7 +830,7 @@ function fsnInitUIevents(instance) {
 					}
 				});
 				//refenerate content
-				fsnUpdateContent(instance);
+				ollaUpdateContent(instance);
 			});
 			//delete modal on hidden
 			modalSelector.on('hidden.bs.modal', function(e) {
@@ -854,11 +854,11 @@ function fsnInitUIevents(instance) {
 			action: 'edit_tabs_modal',
 			saved_values: dataAttributes,
 			post_id: postID,
-			security: fsnJS.fsnEditNonce
+			security: ollaJS.ollaEditNonce
 		};
 		jQuery.post(ajaxurl, data, function(response) {
 			if (response == '-1') {
-				alert(fsnL10n.error);
+				alert(ollaL10n.error);
 				return false;
 			}
 			//append modal to body
@@ -867,17 +867,17 @@ function fsnInitUIevents(instance) {
 			var modalSelector = jQuery('#editTabsModal');
 			modalSelector.modal();
 			//init color pickers
-			jQuery('.fsn-color-picker').wpColorPicker();
+			jQuery('.olla-color-picker').wpColorPicker();
 			//save notice
-			fsnSaveNotice(modalSelector);
+			ollaSaveNotice(modalSelector);
 			//update tabs variables
 			modalSelector.on('hide.bs.modal', function(e) {
 				//update box field arrays
-				var boxFields = modalSelector.find('.fsn-box-form');
+				var boxFields = modalSelector.find('.olla-box-form');
 				if (boxFields.length > 0) {
 					jQuery(boxFields).each(function() {
 						var boxField = jQuery(this);
-						fsnUpdateBoxField(boxField);
+						ollaUpdateBoxField(boxField);
 					});
 				}
 				//loop through form fields and update data attributes
@@ -920,7 +920,7 @@ function fsnInitUIevents(instance) {
 					}
 				});
 				//refenerate content
-				fsnUpdateContent(instance);
+				ollaUpdateContent(instance);
 			});
 			//delete modal on hidden
 			modalSelector.on('hidden.bs.modal', function(e) {
@@ -944,11 +944,11 @@ function fsnInitUIevents(instance) {
 			action: 'edit_tab_modal',
 			saved_values: dataAttributes,
 			post_id: postID,
-			security: fsnJS.fsnEditNonce
+			security: ollaJS.ollaEditNonce
 		};
 		jQuery.post(ajaxurl, data, function(response) {
 			if (response == '-1') {
-				alert(fsnL10n.error);
+				alert(ollaL10n.error);
 				return false;
 			}
 			//append modal to body
@@ -957,9 +957,9 @@ function fsnInitUIevents(instance) {
 			var modalSelector = jQuery('#editTabModal');
 			modalSelector.modal();
 			//init color pickers
-			jQuery('.fsn-color-picker').wpColorPicker();
+			jQuery('.olla-color-picker').wpColorPicker();
 			//save notice
-			fsnSaveNotice(modalSelector);
+			ollaSaveNotice(modalSelector);
 			//update tab variables
 			modalSelector.on('hide.bs.modal', function(e) {
 				//loop through form fields and update data attributes
@@ -1011,7 +1011,7 @@ function fsnInitUIevents(instance) {
 					}
 				});
 				//refenerate content
-				fsnUpdateContent(instance);
+				ollaUpdateContent(instance);
 			});
 			//delete modal on hidden
 			modalSelector.on('hidden.bs.modal', function(e) {
@@ -1021,28 +1021,28 @@ function fsnInitUIevents(instance) {
 	});
 	
 	//element modal
-	instance.on('click', '.fsn-element .edit-element', function(e) {
+	instance.on('click', '.olla-element .edit-element', function(e) {
 		e.preventDefault();
 		var trigger = jQuery(this);
 		var postID = jQuery('input#post_ID').val();
-		var shortcodeTag = trigger.closest('.fsn-element').attr('data-shortcode-tag');		
+		var shortcodeTag = trigger.closest('.olla-element').attr('data-shortcode-tag');		
 		
 		//content options
 		var currentContent = trigger.closest('.element-controls').siblings('.element-text-holder');
-		var fsnContent = currentContent.html();		
+		var ollaContent = currentContent.html();		
 		var dataAttributes = getDataAttrs(currentContent);
 		
 		//data to pass to AJAX function
 		var data = {
 			action: shortcodeTag +'_modal',
-			content_html: fsnContent,
+			content_html: ollaContent,
 			saved_values: dataAttributes,
 			post_id: postID,
-			security: fsnJS.fsnEditNonce
+			security: ollaJS.ollaEditNonce
 		};
 		jQuery.post(ajaxurl, data, function(response) {
 			if (response == '-1') {
-				alert(fsnL10n.error);
+				alert(ollaL10n.error);
 				return false;
 			}
 			//append modal to body
@@ -1051,10 +1051,10 @@ function fsnInitUIevents(instance) {
 			var modalSelector = jQuery('#'+ shortcodeTag +'_modal').last();
 			modalSelector.modal();
 			//reinit tinyMCE
-			if (jQuery('#fsncontent').length > 0) {
+			if (jQuery('#ollacontent').length > 0) {
 				setUserSetting( 'editor', 'tinymce' );
 				modalSelector.on('shown.bs.modal', function() {	
-					var $element = jQuery('#fsncontent');
+					var $element = jQuery('#ollacontent');
 			        var qt, textfield_id = $element.attr("id"),
 			            content = '';
 			
@@ -1070,33 +1070,33 @@ function fsnInitUIevents(instance) {
 			        if(tinymce.majorVersion === "4") tinymce.execCommand( 'mceAddEditor', true, textfield_id );
 			        window.switchEditors.go(textfield_id, 'tmce');
 			        //focus on this RTE
-			        tinyMCE.get('fsncontent').focus();
+			        tinyMCE.get('ollacontent').focus();
 				});
 				//destroy tinyMCE
 				modalSelector.on('hidden.bs.modal', function() {					
 					//make compatable with TinyMCE 4 which is used starting with WordPress 3.9
 					if(tinymce.majorVersion === "4") {
-						tinymce.execCommand('mceRemoveEditor', true, 'fsncontent');
+						tinymce.execCommand('mceRemoveEditor', true, 'ollacontent');
                     } else {
-						tinymce.execCommand("mceRemoveControl", true, 'fsncontent');
+						tinymce.execCommand("mceRemoveControl", true, 'ollacontent');
                     }
 				});
 			}
 			//init color pickers
-			jQuery('.fsn-color-picker').wpColorPicker();
+			jQuery('.olla-color-picker').wpColorPicker();
 			//save notice
-			fsnSaveNotice(modalSelector);
+			ollaSaveNotice(modalSelector);
 			//update content variables
 			modalSelector.on('hide.bs.modal', function(e) {
 				//custom save trigger event
-				modalSelector.trigger('fsnSave', shortcodeTag);
-				if (jQuery('#fsncontent').not('.element-input').length > 0) {
+				modalSelector.trigger('ollaSave', shortcodeTag);
+				if (jQuery('#ollacontent').not('.element-input').length > 0) {
 					//update html content
-					if ( jQuery('#wp-fsncontent-wrap').hasClass('html-active') ) {										
-						var htmlEditorVal = switchEditors.wpautop(jQuery('#fsncontent').val());
-						tinyMCE.get('fsncontent').setContent(htmlEditorVal);
+					if ( jQuery('#wp-ollacontent-wrap').hasClass('html-active') ) {										
+						var htmlEditorVal = switchEditors.wpautop(jQuery('#ollacontent').val());
+						tinyMCE.get('ollacontent').setContent(htmlEditorVal);
 					}
-					var newContent = tinyMCE.get('fsncontent').getContent();				
+					var newContent = tinyMCE.get('ollacontent').getContent();				
 					if (newContent != '') {
 						currentContent.html(newContent);
 					} else {
@@ -1110,7 +1110,7 @@ function fsnInitUIevents(instance) {
 						var newContent = jQuery('.content-field').val();
 						var newContent = encodeURIComponent(newContent);
 					} else if (jQuery('.content-field').is('textarea')) {
-						var newContent = fsnautop(jQuery('.content-field').val());
+						var newContent = ollaautop(jQuery('.content-field').val());
 					} else {
 						var newContent = jQuery('.content-field').val();
 					}
@@ -1121,11 +1121,11 @@ function fsnInitUIevents(instance) {
 					}
 				}
 				//update box field arrays
-				var boxFields = modalSelector.find('.fsn-box-form');
+				var boxFields = modalSelector.find('.olla-box-form');
 				if (boxFields.length > 0) {
 					jQuery(boxFields).each(function() {
 						var boxField = jQuery(this);
-						fsnUpdateBoxField(boxField);
+						ollaUpdateBoxField(boxField);
 					});
 				} 
 				//loop through form fields and update data attributes
@@ -1150,12 +1150,12 @@ function fsnInitUIevents(instance) {
 							newParamValue = checkedRadio.val();
 							break;
 						default:
-							if (jQuery(this).attr('id') == 'fsncontent') {
-								if ( jQuery('#wp-fsncontent-wrap').hasClass('html-active') ) {										
-									var htmlEditorVal = switchEditors.wpautop(jQuery('#fsncontent').val());
-									tinyMCE.get('fsncontent').setContent(htmlEditorVal);
+							if (jQuery(this).attr('id') == 'ollacontent') {
+								if ( jQuery('#wp-ollacontent-wrap').hasClass('html-active') ) {										
+									var htmlEditorVal = switchEditors.wpautop(jQuery('#ollacontent').val());
+									tinyMCE.get('ollacontent').setContent(htmlEditorVal);
 								}
-								newParamValue = tinyMCE.get('fsncontent').getContent();
+								newParamValue = tinyMCE.get('ollacontent').getContent();
 							} else {
 								newParamValue = jQuery(this).val();
 							}
@@ -1188,7 +1188,7 @@ function fsnInitUIevents(instance) {
 				//hide modal ensure user editor setting stays as tinymce and regenerate RTE content
 				setUserSetting( 'editor', 'tinymce' );
 				//refenerate content
-				fsnUpdateContent(instance);
+				ollaUpdateContent(instance);
 			});
 			//delete modal on hidden
 			modalSelector.on('hidden.bs.modal', function(e) {
@@ -1198,7 +1198,7 @@ function fsnInitUIevents(instance) {
 	});
 	
 	//save template modal
-	instanceParent.on('click', '.fsn-save-template', function(e) {
+	instanceParent.on('click', '.olla-save-template', function(e) {
 		e.preventDefault();
 		
 		var postID = jQuery('input#post_ID').val();
@@ -1207,11 +1207,11 @@ function fsnInitUIevents(instance) {
 		var data = {
 			action: 'save_template_modal',
 			post_id: postID,
-			security: fsnJS.fsnEditNonce
+			security: ollaJS.ollaEditNonce
 		};
 		jQuery.post(ajaxurl, data, function(response) {
 			if (response == '-1') {
-				alert(fsnL10n.error);
+				alert(ollaL10n.error);
 				return false;
 			}
 			//append modal to body
@@ -1223,24 +1223,24 @@ function fsnInitUIevents(instance) {
 			modalSelector.on('click', '.save-template', function(e) {
 				e.preventDefault();
 				var templateName = modalSelector.find('input[name="template_name"]').val();
-				if (instance.attr('id') == 'fsn-main-ui') {
+				if (instance.attr('id') == 'olla-main-ui') {
 					var templateData = tinyMCE.get('content').getContent();
 				} else {
-					var templateData = fsnGetContent(instance);
+					var templateData = ollaGetContent(instance);
 				}
 				var savedata = {
 					action: 'save_template',
 					template_name: templateName,
 					template_data: templateData,
 					post_id: postID,
-					security: fsnJS.fsnEditNonce
+					security: ollaJS.ollaEditNonce
 				};
 				jQuery.post(ajaxurl, savedata, function(response) {
 					modalSelector.find('.notice').remove();
 					if (response.status == 'success') {
-						modalSelector.find('.modal-body').prepend('<div class="notice notice-success is-dismissible"><p>'+ fsnL10n.template_save_success +'</p><button class="notice-dismiss" type="button"><span class="screen-reader-text">'+ fsnL10n.notice_dismiss +'</span></button></div>');
+						modalSelector.find('.modal-body').prepend('<div class="notice notice-success is-dismissible"><p>'+ ollaL10n.template_save_success +'</p><button class="notice-dismiss" type="button"><span class="screen-reader-text">'+ ollaL10n.notice_dismiss +'</span></button></div>');
 					} else if (response.status == 'error') {
-						modalSelector.find('.modal-body').prepend('<div class="notice notice-error is-dismissible"><p>'+ fsnL10n.template_save_error +'</p><button class="notice-dismiss" type="button"><span class="screen-reader-text">'+ fsnL10n.notice_dismiss +'</span></button></div>');
+						modalSelector.find('.modal-body').prepend('<div class="notice notice-error is-dismissible"><p>'+ ollaL10n.template_save_error +'</p><button class="notice-dismiss" type="button"><span class="screen-reader-text">'+ ollaL10n.notice_dismiss +'</span></button></div>');
 					}
 				});		
 			});
@@ -1258,7 +1258,7 @@ function fsnInitUIevents(instance) {
 	});
 	
 	//load template modal
-	instanceParent.on('click', '.fsn-load-template' , function(e) {
+	instanceParent.on('click', '.olla-load-template' , function(e) {
 		e.preventDefault();
 		
 		var postID = jQuery('input#post_ID').val();
@@ -1267,11 +1267,11 @@ function fsnInitUIevents(instance) {
 		var data = {
 			action: 'load_template_modal',
 			post_id: postID,
-			security: fsnJS.fsnEditNonce
+			security: ollaJS.ollaEditNonce
 		};
 		jQuery.post(ajaxurl, data, function(response) {
 			if (response == '-1') {
-				alert(fsnL10n.error);
+				alert(ollaL10n.error);
 				return false;
 			}
 			//append modal to body
@@ -1285,7 +1285,7 @@ function fsnInitUIevents(instance) {
 					e.stopPropagation();					
 					var trigger = jQuery(this);
 					var target = trigger.next('.template-controls-dropdown');
-					fsnCloseDropdowns(trigger, target);
+					ollaCloseDropdowns(trigger, target);
 					trigger.toggleClass('open');
 					target.toggleClass('collapsed');
 				});
@@ -1300,11 +1300,11 @@ function fsnInitUIevents(instance) {
 					action: 'load_template',
 					template_id: templateID,
 					post_id: postID,
-					security: fsnJS.fsnEditNonce
+					security: ollaJS.ollaEditNonce
 				};
 				jQuery.post(ajaxurl, data, function(response) {
 					if (response == '-1') {
-						alert(fsnL10n.error);
+						alert(ollaL10n.error);
 						return false;
 					}
 					//hide modal					
@@ -1318,7 +1318,7 @@ function fsnInitUIevents(instance) {
 							var navItems = tabs.find('.nav-tabs a');
 							var tabContainers = tabs.find('.tab-pane');
 							for (i = 0; i < tabContainers.length; i++) {
-								var newID = fsnUniqid('tab-');
+								var newID = ollaUniqid('tab-');
 								navItems.eq(i).attr('href', '#'+ newID);
 								tabContainers.eq(i).attr('id', newID);
 								tabContainers.eq(i).children('.tab-container').attr('data-tab-id', newID);
@@ -1329,11 +1329,11 @@ function fsnInitUIevents(instance) {
 					initSortables(instance);
 					initResizables(instance);
 					//init tooltips
-					fsnInitTooltips(instance);
+					ollaInitTooltips(instance);
 					//reinit add col fields
-					fsnAddColFields(instance);
+					ollaAddColFields(instance);
 					//update content
-					fsnUpdateContent(instance);
+					ollaUpdateContent(instance);
 				});		
 			});
 			//delete template
@@ -1346,11 +1346,11 @@ function fsnInitUIevents(instance) {
 					action: 'delete_template',
 					template_id: templateID,
 					post_id: postID,
-					security: fsnJS.fsnEditNonce
+					security: ollaJS.ollaEditNonce
 				};
 				jQuery.post(ajaxurl, data, function(response) {
 					if (response == '-1') {
-						alert(fsnL10n.error);
+						alert(ollaL10n.error);
 						return false;
 					}
 					//remove item
@@ -1358,16 +1358,16 @@ function fsnInitUIevents(instance) {
 						templateItem.fadeOut(300, function() {
 							jQuery(this).remove();
 							if (jQuery('.template-item').length == 0) {
-								modalSelector.find('.modal-body').append('<p>'+ fsnL10n.template_delete_all +'</p>');
+								modalSelector.find('.modal-body').append('<p>'+ ollaL10n.template_delete_all +'</p>');
 							}
 						});
 					} else {
-						alert(fsnL10n.template_delete_error);
+						alert(ollaL10n.template_delete_error);
 					}
 				});		
 			});
 			//load more templates
-			modalSelector.on('click', '.fsn-load-more-templates', function(e) {
+			modalSelector.on('click', '.olla-load-more-templates', function(e) {
 				e.preventDefault();
 				var loadMoreBtn = jQuery(this);
 				var nextPage = (loadMoreBtn.data('paged') !== undefined) ? parseInt(loadMoreBtn.data('paged')) : 2;
@@ -1376,22 +1376,22 @@ function fsnInitUIevents(instance) {
 				var totalPages = Math.ceil(totalPosts/postsPerPage);
 				
 				var data = {
-					action: 'fsn_posts_search',
+					action: 'olla_posts_search',
 					page : nextPage,
 					posts_per_page : postsPerPage,
 					postType : 'template',
 					post_id: postID,
-					security: fsnJS.fsnEditNonce
+					security: ollaJS.ollaEditNonce
 				};
 				jQuery.post(ajaxurl, data, function(response) {
 					if (response == '-1') {
-						alert(fsnL10n.error);
+						alert(ollaL10n.error);
 						return false;
 					}
 					//load templates
 					var output = '';
 					for (i=0; i < response.items.length; i++) {
-						output += '<div class="template-item" data-template-id="'+ response.items[i].id +'"><span class="template-name">'+ response.items[i].text +'</span><span class="template-controls-toggle" title="'+ fsnL10n.template_options +'"><i class="material-icons">&#xE5D3;</i></span><div class="template-controls-dropdown collapsed"><a href="#" class="delete-template">'+ fsnL10n.delete +'</a></div></div>';
+						output += '<div class="template-item" data-template-id="'+ response.items[i].id +'"><span class="template-name">'+ response.items[i].text +'</span><span class="template-controls-toggle" title="'+ ollaL10n.template_options +'"><i class="material-icons">&#xE5D3;</i></span><div class="template-controls-dropdown collapsed"><a href="#" class="delete-template">'+ ollaL10n.delete +'</a></div></div>';
 					}
 					loadMoreBtn.before(output);
 					//increment page
@@ -1411,9 +1411,9 @@ function fsnInitUIevents(instance) {
 	});
 }
 
-function fsnAddColFields(instance) {
+function ollaAddColFields(instance) {
 	//remove add col areas
-	instance.find('.fsn-add-col').remove();
+	instance.find('.olla-add-col').remove();
 	//in offset areas
 	var colsWithOffset = instance.find('div[class*="col-sm-offset"]');
 	colsWithOffset.each(function() {
@@ -1421,7 +1421,7 @@ function fsnAddColFields(instance) {
 		var spaceAvailable = col.attr('data-offset');
 		var spaceAvailableWidth = (parseInt(col.css('margin-left')) - 8);
 		var addColLeft = ( col.offset().left - col.closest('.row').offset().left ) - spaceAvailableWidth - 4;
-		col.before('<div class="fsn-add-col" style="width:'+ spaceAvailableWidth +'px; left:'+ addColLeft +'px;" data-width="'+ spaceAvailable +'" title="'+ fsnL10n.column_add +'"><i class="material-icons md-18">&#xE147;</i></div>');
+		col.before('<div class="olla-add-col" style="width:'+ spaceAvailableWidth +'px; left:'+ addColLeft +'px;" data-width="'+ spaceAvailable +'" title="'+ ollaL10n.column_add +'"><i class="material-icons md-18">&#xE147;</i></div>');
 	});
 	//after last col
 	var rows = instance.find('.row');
@@ -1447,18 +1447,18 @@ function fsnAddColFields(instance) {
 			spaceAvailable = 12 - usedSpace;
 			spaceAvailableWidth = (jQuery(this).width() / 12) * spaceAvailable - 8;
 			addColLeft = (jQuery(this).width() / 12) * usedSpace + 4;
-			jQuery(this).append('<div class="fsn-add-col" style="width:'+ spaceAvailableWidth +'px; left:'+ addColLeft +'px;" data-width="'+ spaceAvailable +'" title="'+ fsnL10n.column_add +'"><i class="material-icons md-18">&#xE147;</i></div>');
+			jQuery(this).append('<div class="olla-add-col" style="width:'+ spaceAvailableWidth +'px; left:'+ addColLeft +'px;" data-width="'+ spaceAvailable +'" title="'+ ollaL10n.column_add +'"><i class="material-icons md-18">&#xE147;</i></div>');
 		}
 	});
 	//init tooltips
-	fsnInitTooltips(instance, true);
+	ollaInitTooltips(instance, true);
 }
 
 function initSortables(instance) {
 	
 	//row sorting
 	instance.sortable({	
-		//connectWith: "#fsn-interface-grid > .row-container > .row-wrapper > .row > [class*='col-'] > .column-container > .column-wrapper",
+		//connectWith: "#olla-interface-grid > .row-container > .row-wrapper > .row > [class*='col-'] > .column-container > .column-wrapper",
 		cursor: "move",
 		items: ".row-container",
 		handle: ".row-header",
@@ -1469,20 +1469,20 @@ function initSortables(instance) {
 		},
 		change: function(event, ui) {			
 			//reinit add col fields
-			//fsnAddColFields(instance);
+			//ollaAddColFields(instance);
 		},
 		update: function(event, ui) {
 			//reinit add col fields
-			fsnAddColFields(instance);
+			ollaAddColFields(instance);
 			//update content
-			fsnUpdateContent(instance);
+			ollaUpdateContent(instance);
 		}
 	});
 	
 	//column sorting	
 	var leftStart = 0;
 	instance.find('.row').sortable({
-		//connectWith: "#fsn-interface-grid .row",
+		//connectWith: "#olla-interface-grid .row",
 		cursor: "move",		
 		helper: "clone",
 		items: "[class*='col-']",
@@ -1535,7 +1535,7 @@ function initSortables(instance) {
 			}
 			var totalSpace = totalSpaceFront;
 			var succeedingItems = currentItem.nextAll().not('.ui-sortable-placeholder');
-			if (succeedingItems.first().hasClass('fsn-add-col')) {
+			if (succeedingItems.first().hasClass('olla-add-col')) {
 				succeedingItems = succeedingItems.slice(1);
 			}
 			succeedingItems.each(function() {
@@ -1594,9 +1594,9 @@ function initSortables(instance) {
 				}
 			}
 			//reinit add col fields
-			fsnAddColFields(instance);
+			ollaAddColFields(instance);
 			//update content
-			fsnUpdateContent(instance);
+			ollaUpdateContent(instance);
 		}
 	});
 	
@@ -1623,17 +1623,17 @@ function initSortables(instance) {
 				entryPoint.after(targetContainerData);
 			}
 			//reinit add col fields
-			//fsnAddColFields(instance);
+			//ollaAddColFields(instance);
 			//update content
-			fsnUpdateContent(instance);
+			ollaUpdateContent(instance);
 		}
 	});
 	
 	//tabs and element sorting
 	instance.find('.row [class*="col-"] .column-wrapper, .row [class*="col-"] .column-wrapper .tab').sortable({
-		connectWith: ".fsn-interface-grid [class*='col-'] .column-wrapper, .fsn-interface-grid [class*='col-'] .column-wrapper .tab",
+		connectWith: ".olla-interface-grid [class*='col-'] .column-wrapper, .olla-interface-grid [class*='col-'] .column-wrapper .tab",
 		cursor: "move",
-		items: ".fsn-element, .row-container, .tabs-container",
+		items: ".olla-element, .row-container, .tabs-container",
 		dropOnEmpty: true,
 		stop: function(event, ui) {
 			var doubleNestedRowContainers = jQuery('.row-container').find('.row-container').find('.row-container');
@@ -1647,7 +1647,7 @@ function initSortables(instance) {
 		},
 		update: function(event, ui) {
 			//update content
-			fsnUpdateContent(instance);
+			ollaUpdateContent(instance);
 		}
 	});
 }
@@ -1655,7 +1655,7 @@ function initSortables(instance) {
 function initResizables(instance) {
 	instance.find('.row [class*="col-"]').resizable({
 		handles: 'e, w',
-		helper: 'fsn-helper',
+		helper: 'olla-helper',
 		stop: function(event, ui) {
 			//reset Resizable outcome			
 			ui.element.removeAttr('style');
@@ -1861,10 +1861,10 @@ function initResizables(instance) {
 			var currentItemWidth = currentItem.attr('data-width');
 			currentItem.find('.column-title .column-width').text(currentItemWidth);
 			//reinit add col fields
-			fsnAddColFields(instance);
+			ollaAddColFields(instance);
 			//update content
-			fsnResize();
-			fsnUpdateContent(instance);
+			ollaResize();
+			ollaUpdateContent(instance);
 		}
 	});
 }
@@ -2003,7 +2003,7 @@ function setDependencies(container) {
 //button field
 jQuery(document).ready(function() {
 	//init modal
-	jQuery('body').on('click', '.fsn-add-edit-button', function(e) {
+	jQuery('body').on('click', '.olla-add-edit-button', function(e) {
 		e.preventDefault();
 		var buttonTrigger = jQuery(this);
 		var postID = jQuery('input#post_ID').val();
@@ -2038,11 +2038,11 @@ jQuery(document).ready(function() {
 		        current_collapse_label_show: currentCollapseLabelShow,
 		        current_collapse_label_hide: currentCollapseLabelHide,
 		        current_component_id: currentComponentID,
-		        security: fsnJS.fsnEditNonce
+		        security: ollaJS.ollaEditNonce
 		    },
 		    function( response ) {
 			    if (response == '-1') {
-					alert(fsnL10n.error);
+					alert(ollaL10n.error);
 					return false;
 				}
 		        jQuery('body').append(response);
@@ -2061,7 +2061,7 @@ jQuery(document).ready(function() {
 		        var buttonComponentID = buttonModal.find('[name="button_component_id"]');
 		        
 		        //save notice
-				fsnSaveNotice(buttonModal);
+				ollaSaveNotice(buttonModal);
 		        
 		        //select post
 		        buttonModal.find('[name="button_attached"]').on('change', function() {
@@ -2156,55 +2156,55 @@ jQuery(document).ready(function() {
 			        
 			        //update trigger button text
 			        buttonTrigger.find('.button-verb').html(buttonTrigger.attr('data-isset'));
-			        buttonTrigger.siblings('.fsn-remove-button').removeClass('deactivated');
+			        buttonTrigger.siblings('.olla-remove-button').removeClass('deactivated');
 			        
 			        //set Button summary
 			        var buttonSummary = '';
 			        switch(buttonTypeVal) {
 			        	case 'external':
-			        		buttonSummary += '<p>'+ fsnL10n.button_summary_type +': <strong>'+ fsnL10n.button_summary_external +'</strong></p>';
-							buttonSummary += buttonLinkVal != '' ? '<p>'+ fsnL10n.button_summary_link +': <strong>'+ buttonLinkVal +'</strong></p>' : '';
-							buttonSummary += buttonLabelVal != '' ? '<p>'+ fsnL10n.button_summary_label +': <strong>'+ buttonLabelVal +'</strong></p>' : '';
+			        		buttonSummary += '<p>'+ ollaL10n.button_summary_type +': <strong>'+ ollaL10n.button_summary_external +'</strong></p>';
+							buttonSummary += buttonLinkVal != '' ? '<p>'+ ollaL10n.button_summary_link +': <strong>'+ buttonLinkVal +'</strong></p>' : '';
+							buttonSummary += buttonLabelVal != '' ? '<p>'+ ollaL10n.button_summary_label +': <strong>'+ buttonLabelVal +'</strong></p>' : '';
 							switch(buttonTargetVal) {
 								case '_blank':
-									buttonSummary += '<p>'+ fsnL10n.button_summary_target +': <strong>'+ fsnL10n.button_summary_target_blank +'</strong></p>';
+									buttonSummary += '<p>'+ ollaL10n.button_summary_target +': <strong>'+ ollaL10n.button_summary_target_blank +'</strong></p>';
 									break;
 								case '_parent':
-									buttonSummary += '<p>'+ fsnL10n.button_summary_target +': <strong>'+ fsnL10n.button_summary_target_parent +'</strong></p>';
+									buttonSummary += '<p>'+ ollaL10n.button_summary_target +': <strong>'+ ollaL10n.button_summary_target_parent +'</strong></p>';
 									break;
 								case '_top':
-									buttonSummary += '<p>'+ fsnL10n.button_summary_target +': <strong>'+ fsnL10n.button_summary_target_top +'</strong></p>';
+									buttonSummary += '<p>'+ ollaL10n.button_summary_target +': <strong>'+ ollaL10n.button_summary_target_top +'</strong></p>';
 									break;
 								default:
-									buttonSummary += '<p>'+ fsnL10n.button_summary_target +': <strong>'+ fsnL10n.button_summary_target_default +'</strong></p>';
+									buttonSummary += '<p>'+ ollaL10n.button_summary_target +': <strong>'+ ollaL10n.button_summary_target_default +'</strong></p>';
 							}
 			        		break;
 			        	case 'internal':
-			        		buttonSummary += '<p>'+ fsnL10n.button_summary_type +': <strong>'+ fsnL10n.button_summary_internal +'</strong></p>';
-							buttonSummary += attachedItem.length > 0 ? '<p>'+ fsnL10n.button_summary_link +': <strong>'+ attachedItem.text() +'</strong></p>' : '';
-							buttonSummary += buttonLabelVal != '' ? '<p>'+ fsnL10n.button_summary_label +': <strong>'+ buttonLabelVal +'</strong></p>' : '';
+			        		buttonSummary += '<p>'+ ollaL10n.button_summary_type +': <strong>'+ ollaL10n.button_summary_internal +'</strong></p>';
+							buttonSummary += attachedItem.length > 0 ? '<p>'+ ollaL10n.button_summary_link +': <strong>'+ attachedItem.text() +'</strong></p>' : '';
+							buttonSummary += buttonLabelVal != '' ? '<p>'+ ollaL10n.button_summary_label +': <strong>'+ buttonLabelVal +'</strong></p>' : '';
 							switch(buttonTargetVal) {
 								case '_blank':
-									buttonSummary += '<p>'+ fsnL10n.button_summary_target +': <strong>'+ fsnL10n.button_summary_target_blank +'</strong></p>';
+									buttonSummary += '<p>'+ ollaL10n.button_summary_target +': <strong>'+ ollaL10n.button_summary_target_blank +'</strong></p>';
 									break;
 								case '_parent':
-									buttonSummary += '<p>'+ fsnL10n.button_summary_target +': <strong>'+ fsnL10n.button_summary_target_parent +'</strong></p>';
+									buttonSummary += '<p>'+ ollaL10n.button_summary_target +': <strong>'+ ollaL10n.button_summary_target_parent +'</strong></p>';
 									break;
 								case '_top':
-									buttonSummary += '<p>'+ fsnL10n.button_summary_target +': <strong>'+ fsnL10n.button_summary_target_top +'</strong></p>';
+									buttonSummary += '<p>'+ ollaL10n.button_summary_target +': <strong>'+ ollaL10n.button_summary_target_top +'</strong></p>';
 									break;
 								default:
-									buttonSummary += '<p>'+ fsnL10n.button_summary_target +': <strong>'+ fsnL10n.button_summary_target_default +'</strong></p>';
+									buttonSummary += '<p>'+ ollaL10n.button_summary_target +': <strong>'+ ollaL10n.button_summary_target_default +'</strong></p>';
 							}
 			        		break;
 			        	case 'collapse':
 			        		if (buttonComponentIDval != '') {
 				        		buttonCollapseIDval = buttonComponentID.find('option:selected').text();
 			        		}
-			        		buttonSummary += '<p>'+ fsnL10n.button_summary_type +': <strong>'+ fsnL10n.button_summary_collapse +'</strong></p>';
-							buttonSummary += buttonCollapseIDval != '' ? '<p>'+ fsnL10n.button_summary_opens +': <strong>'+ buttonCollapseIDval +'</strong></p>' : '';
-							buttonSummary += buttonCollapseLabelShowVal != '' ? '<p>'+ fsnL10n.button_summary_collapse_show +': <strong>'+ buttonCollapseLabelShowVal +'</strong></p>' : '';
-							buttonSummary += buttonCollapseLabelHideVal != '' ? '<p>'+ fsnL10n.button_summary_collapse_hide +': <strong>'+ buttonCollapseLabelHideVal +'</strong></p>' : '';
+			        		buttonSummary += '<p>'+ ollaL10n.button_summary_type +': <strong>'+ ollaL10n.button_summary_collapse +'</strong></p>';
+							buttonSummary += buttonCollapseIDval != '' ? '<p>'+ ollaL10n.button_summary_opens +': <strong>'+ buttonCollapseIDval +'</strong></p>' : '';
+							buttonSummary += buttonCollapseLabelShowVal != '' ? '<p>'+ ollaL10n.button_summary_collapse_show +': <strong>'+ buttonCollapseLabelShowVal +'</strong></p>' : '';
+							buttonSummary += buttonCollapseLabelHideVal != '' ? '<p>'+ ollaL10n.button_summary_collapse_hide +': <strong>'+ buttonCollapseLabelHideVal +'</strong></p>' : '';
 			        		break;
 			        	case 'modal':
 			        		if (buttonComponentIDval != '') {
@@ -2212,9 +2212,9 @@ jQuery(document).ready(function() {
 			        		} else {
 				        		buttonModalIDval = '';	
 			        		}
-			        		buttonSummary += '<p>'+ fsnL10n.button_summary_type +': <strong>'+ fsnL10n.button_summary_modal +'</strong></p>';
-							buttonSummary += buttonModalIDval != '' ? '<p>'+ fsnL10n.button_summary_opens +': <strong>'+ buttonModalIDval +'</strong></p>' : '';
-							buttonSummary += buttonLabelVal != '' ? '<p>'+ fsnL10n.button_summary_label +': <strong>'+ buttonLabelVal +'</strong></p>' : '';
+			        		buttonSummary += '<p>'+ ollaL10n.button_summary_type +': <strong>'+ ollaL10n.button_summary_modal +'</strong></p>';
+							buttonSummary += buttonModalIDval != '' ? '<p>'+ ollaL10n.button_summary_opens +': <strong>'+ buttonModalIDval +'</strong></p>' : '';
+							buttonSummary += buttonLabelVal != '' ? '<p>'+ ollaL10n.button_summary_label +': <strong>'+ buttonLabelVal +'</strong></p>' : '';
 			        		break;
 			        }
 			        buttonSummaryContainer.html(buttonSummary);
@@ -2228,10 +2228,10 @@ jQuery(document).ready(function() {
 		);
 	});
 	//remove button
-	jQuery('body').on('click', '.fsn-remove-button', function(e) {
+	jQuery('body').on('click', '.olla-remove-button', function(e) {
 		e.preventDefault();
 		var clearButton = jQuery(this);
-		var editButton = clearButton.siblings('.fsn-add-edit-button');
+		var editButton = clearButton.siblings('.olla-add-edit-button');
         editButton.find('.button-verb').html(editButton.attr('data-empty'));
         clearButton.addClass('deactivated');
 		clearButton.siblings('.button-string').val('');
@@ -2258,20 +2258,20 @@ jQuery(document).ready(function() {
 			action: 'custom_list_add_item',
 			listID: customListID,
 			post_id: postID,
-			security: fsnJS.fsnEditNonce
+			security: ollaJS.ollaEditNonce
 		};
 		jQuery.post(ajaxurl, data, function(response) {
 			if (response == '-1') {
-				alert(fsnL10n.error);
+				alert(ollaL10n.error);
 				return false;
 			}
 			customListItemsContainer.append(response);
 			//initialize color pickers
-			jQuery('.fsn-color-picker').wpColorPicker();
+			jQuery('.olla-color-picker').wpColorPicker();
 			//set dependencies
 			setDependencies(customListItemsContainer);
 			//trigger item added event
-			customListItemsContainer.trigger('fsnAddListItem');
+			customListItemsContainer.trigger('ollaAddListItem');
 		});	
 	});
 	//drag and drop sorting
@@ -2296,10 +2296,10 @@ jQuery(document).ready(function() {
 		var targetListItem = jQuery(this).parents('.custom-list-item');
 		if (targetListItem.hasClass('collapse-active')) {
 			targetListItem.removeClass('collapse-active');
-			trigger.text(fsnL10n.custom_list_item_collapse);
+			trigger.text(ollaL10n.custom_list_item_collapse);
 		} else {
 			targetListItem.addClass('collapse-active');
-			trigger.text(fsnL10n.custom_list_item_expand);
+			trigger.text(ollaL10n.custom_list_item_expand);
 		}
 	});
 	//expand all
@@ -2309,7 +2309,7 @@ jQuery(document).ready(function() {
 		listItems.each(function() {
 			var listItem = jQuery(this);
 			listItem.removeClass('collapse-active');
-			listItem.find('.collapse-custom-list-item').text(fsnL10n.custom_list_item_collapse);
+			listItem.find('.collapse-custom-list-item').text(ollaL10n.custom_list_item_collapse);
 		});
 	});
 	//collapse all
@@ -2319,19 +2319,19 @@ jQuery(document).ready(function() {
 		listItems.each(function() {
 			var listItem = jQuery(this);
 			listItem.addClass('collapse-active');
-			listItem.find('.collapse-custom-list-item').text(fsnL10n.custom_list_item_expand);
+			listItem.find('.collapse-custom-list-item').text(ollaL10n.custom_list_item_expand);
 		});
 	});
 	//generate custom list item shortcode (uses custom save event)
-	jQuery('body').on('fsnSave', function(e, shortcodeTag) {
+	jQuery('body').on('ollaSave', function(e, shortcodeTag) {
 		var customList = jQuery('.custom-list-sort');
 		if (customList.length > 0) {
 			customListItemShortcodes();
 		}
 	});
 	//Init select2 fields inside custom list items
-	jQuery('body').on('fsnAddListItem', function(e) {
-		fsnInitPostSelect();
+	jQuery('body').on('ollaAddListItem', function(e) {
+		ollaInitPostSelect();
 	});
 });
 
@@ -2341,7 +2341,7 @@ function customListItemShortcodes() {
 	var shortcodesString = '';	
 	var customListItems = jQuery('.custom-list-item');
 	customListItems.each(function() {
-		shortcodesString += '[fsn_custom_list_item list_id="'+ customListID +'"';
+		shortcodesString += '[olla_custom_list_item list_id="'+ customListID +'"';
 		var currentItem = jQuery(this);
 		var itemParams = currentItem.find('.element-input');
 		itemParams.each(function() {
@@ -2380,7 +2380,7 @@ function customListItemShortcodes() {
 				} else if (jQuery(this).hasClass('encode-url')) {
 					newParamValue = encodeURIComponent(newParamValue);
 				}
-				newParamValue = fsnCustomEntitiesEncode(newParamValue);	
+				newParamValue = ollaCustomEntitiesEncode(newParamValue);	
 				shortcodesString += ' '+ paramName +'="'+ newParamValue +'"';
 				
 			}
@@ -2392,7 +2392,7 @@ function customListItemShortcodes() {
 }
 
 //update box field
-function fsnUpdateBoxField(field) {
+function ollaUpdateBoxField(field) {
 	
 	//set hidden input value (for shortcode param)
 	var boxArray = new Object;
@@ -2429,11 +2429,11 @@ function fsnUpdateBoxField(field) {
 jQuery(document).ready(function() {
 	jQuery('body').on('show.bs.modal', '.modal', function() {
 		var modal = jQuery(this);
-		fsnInitPostSelect();
+		ollaInitPostSelect();
 	});	
 });
 
-function fsnInitPostSelect() {
+function ollaInitPostSelect() {
 	var postID = jQuery('input#post_ID').val();
 	var select2Elements = jQuery('.select2-posts-element');
 	select2Elements.each(function() {
@@ -2457,12 +2457,12 @@ function fsnInitPostSelect() {
 					return {
 						q: params.term, // search term
 						page: params.page,
-						action: 'fsn_posts_search',
+						action: 'olla_posts_search',
 						posts_per_page: postsPerPage,
 						postType: postType,
 						post_id: postID,
 						hierarchical : hierarchical,
-						security: fsnJS.fsnEditNonce,
+						security: ollaJS.ollaEditNonce,
 					};
 			    },
 			    processResults: function (data, params) {
@@ -2478,7 +2478,7 @@ function fsnInitPostSelect() {
 			minimumInputLength: 1,
 			language: {
 				inputTooShort: function(args) {
-					return fsnL10n.search;
+					return ollaL10n.search;
 				}
 			},
 			escapeMarkup: function (text) {
@@ -2502,7 +2502,7 @@ function getDataAttrs(obj) {
 }
 
 //get unique ID. mirrors PHP uniqid() function
-function fsnUniqid(prefix, more_entropy) {
+function ollaUniqid(prefix, more_entropy) {
 	if (typeof prefix === 'undefined') {
 		prefix = '';
 	}
@@ -2552,23 +2552,23 @@ function fsnUniqid(prefix, more_entropy) {
 
 //resizing
 jQuery(document).ready(function() {
-	fsnResize();
-	jQuery(window).on('resize', fsnDebounce(fsnResize, 50));
-	jQuery(window).on('resize', fsnThrottle(fsnResizeColFields, 100));
+	ollaResize();
+	jQuery(window).on('resize', ollaDebounce(ollaResize, 50));
+	jQuery(window).on('resize', ollaThrottle(ollaResizeColFields, 100));
 });
-function fsnResizeColFields() {
-	var interfaceUIs = jQuery('.fsn-interface-grid');
+function ollaResizeColFields() {
+	var interfaceUIs = jQuery('.olla-interface-grid');
 	interfaceUIs.each(function() {
 		var instance = jQuery(this);
-		fsnAddColFields(instance);
+		ollaAddColFields(instance);
 	});
 }
-function fsnResize() {
-	var interfaceUIs = jQuery('.fsn-interface-grid');
+function ollaResize() {
+	var interfaceUIs = jQuery('.olla-interface-grid');
 	interfaceUIs.each(function() {
 		var instance = jQuery(this);
 		var cols = instance.find('[class*="col-"]');
-		var elements = instance.find('.fsn-element');
+		var elements = instance.find('.olla-element');
 		cols.each(function() {
 			var col = jQuery(this);
 			var colWidth = col.width();
@@ -2604,18 +2604,18 @@ function fsnResize() {
 }
 
 //HTML special character encoding
-function fsnCustomEntitiesEncode(str) {
+function ollaCustomEntitiesEncode(str) {
     return String(str)
-	    .replace(/"/g, '#fsnquot;')
-	    .replace(/\[/g, '#fsnsqbl;')
-	    .replace(/\]/g, '#fsnsqbr;')
-	    .replace(/\</g, '#fsnlt;')
-	    .replace(/\>/g, '#fsngt;');
+	    .replace(/"/g, '#ollaquot;')
+	    .replace(/\[/g, '#ollasqbl;')
+	    .replace(/\]/g, '#ollasqbr;')
+	    .replace(/\</g, '#ollalt;')
+	    .replace(/\>/g, '#ollagt;');
 }
 
 //Add HTML line breaks and paragraph tags in place of single and double line breaks.
 //Similar to wpautop() in WordPress editor.js except will add paragraph tags around a single paragraph.
-function fsnautop( text ) {
+function ollaautop( text ) {
 	if ( text == '' ) {
 		return text;
 	}
@@ -2709,11 +2709,11 @@ function fsnautop( text ) {
 }
 
 //Save notice
-function fsnSaveNotice(modal) {
+function ollaSaveNotice(modal) {
 	modal.on('focus', 'input, select, textarea', function() {
 		modal.find('.save-notice').addClass('active');
 	});
-	modal.on('click', '.add-custom-list-item, .add-gallery-item, .remove-gallery-item, .remove-custom-list-item, .fsn-remove-image, .fsn-remove-video, .fsn-add-edit-button, .fsn-remove-button', function() {
+	modal.on('click', '.add-custom-list-item, .add-gallery-item, .remove-gallery-item, .remove-custom-list-item, .olla-remove-image, .olla-remove-video, .olla-add-edit-button, .olla-remove-button', function() {
 		modal.find('.save-notice').addClass('active');
 	});
 	modal.on('sortupdate', '.custom-list-sort, .gallery-sort', function(event, ui) {
@@ -2725,7 +2725,7 @@ function fsnSaveNotice(modal) {
 }
 
 //regenerate TinyMCE content
-function fsnGetContent(instance) {
+function ollaGetContent(instance) {
 	var interfaceGrid = instance;
 	var outerRows = interfaceGrid.children('.row-container');
 	var output = '';
@@ -2738,12 +2738,12 @@ function fsnGetContent(instance) {
 			for (var k in dataAttributes) {
 				if (dataAttributes.hasOwnProperty(k)) {								
 					var paramName = k.replace(/[-]/g,'_');
-					var paramValue = fsnCustomEntitiesEncode(dataAttributes[k]);
+					var paramValue = ollaCustomEntitiesEncode(dataAttributes[k]);
 					rowParams += ' '+ paramName +'="'+ paramValue +'"';
 			    }
 			}
 		}
-		output += '[fsn_row'+ rowParams +']';
+		output += '[olla_row'+ rowParams +']';
 		var rowChildren = row.children('[class*="col-"]');
 		rowChildren.each(function() {
 			//build outer column shortcodes
@@ -2754,31 +2754,31 @@ function fsnGetContent(instance) {
 				for (var k in dataAttributes) {
 					if (dataAttributes.hasOwnProperty(k)) {								
 						var paramName = k.replace(/[-]/g,'_');
-						var paramValue = fsnCustomEntitiesEncode(dataAttributes[k]);
+						var paramValue = ollaCustomEntitiesEncode(dataAttributes[k]);
 						columnParams += ' '+ paramName +'="'+ paramValue +'"';
 				    }
 				}
 			}
-			output += '[fsn_column'+ columnParams +']';
+			output += '[olla_column'+ columnParams +']';
 			//column children (elements and nested rows)
 			var columnChildren = jQuery(this).children('.column-container').children('.column-wrapper').children();
 			columnChildren.each(function() {
 				var currentChild = jQuery(this);
-				if (currentChild.hasClass('fsn-element')) {
+				if (currentChild.hasClass('olla-element')) {
 					//build elements
 					var element = jQuery(this).find('.element-text-holder');
 					if (element.length != 0) {
 						element.each(function() {
 							var currentElement = jQuery(this);
 							var textContent = currentElement.html();
-							var shortcodeTag = currentElement.parent('.fsn-element').attr('data-shortcode-tag');
+							var shortcodeTag = currentElement.parent('.olla-element').attr('data-shortcode-tag');
 							var dataAttributes = getDataAttrs(currentElement);					
 							var elementParams = '';
 							if (dataAttributes.length != 0) {						
 								for (var k in dataAttributes) {
 									if (dataAttributes.hasOwnProperty(k)) {								
 										var paramName = k.replace(/[-]/g,'_');
-										var paramValue = fsnCustomEntitiesEncode(dataAttributes[k]);
+										var paramValue = ollaCustomEntitiesEncode(dataAttributes[k]);
 										elementParams += ' '+ paramName +'="'+ paramValue +'"';
 								    }
 								}
@@ -2803,12 +2803,12 @@ function fsnGetContent(instance) {
 								for (var k in dataAttributes) {
 									if (dataAttributes.hasOwnProperty(k)) {								
 										var paramName = k.replace(/[-]/g,'_');
-										var paramValue = fsnCustomEntitiesEncode(dataAttributes[k]);
+										var paramValue = ollaCustomEntitiesEncode(dataAttributes[k]);
 										rowInnerParams += ' '+ paramName +'="'+ paramValue +'"';
 								    }
 								}
 							}
-							output += '[fsn_row_inner'+ rowInnerParams +']';
+							output += '[olla_row_inner'+ rowInnerParams +']';
 							var rowInnerChildren = rowInner.find('[class*="col-"]');
 							rowInnerChildren.each(function() {
 								//build inner column shortcodes
@@ -2819,26 +2819,26 @@ function fsnGetContent(instance) {
 									for (var k in dataAttributes) {
 										if (dataAttributes.hasOwnProperty(k)) {								
 											var paramName = k.replace(/[-]/g,'_');
-											var paramValue = fsnCustomEntitiesEncode(dataAttributes[k]);
+											var paramValue = ollaCustomEntitiesEncode(dataAttributes[k]);
 											columnInnerParams += ' '+ paramName +'="'+ paramValue +'"';
 									    }
 									}
 								}
-								output += '[fsn_column_inner'+ columnInnerParams +']';
+								output += '[olla_column_inner'+ columnInnerParams +']';
 								//build elements
 								var element = jQuery(this).find('.element-text-holder');
 								if (element.length != 0) {				
 									element.each(function() {
 										var currentElement = jQuery(this);
 										var textContent = currentElement.html();
-										var shortcodeTag = currentElement.parent('.fsn-element').attr('data-shortcode-tag');
+										var shortcodeTag = currentElement.parent('.olla-element').attr('data-shortcode-tag');
 										var dataAttributes = getDataAttrs(currentElement);					
 										var elementParams = '';
 										if (dataAttributes.length != 0) {						
 											for (var k in dataAttributes) {
 												if (dataAttributes.hasOwnProperty(k)) {								
 													var paramName = k.replace(/[-]/g,'_');
-													var paramValue = fsnCustomEntitiesEncode(dataAttributes[k]);
+													var paramValue = ollaCustomEntitiesEncode(dataAttributes[k]);
 													elementParams += ' '+ paramName +'="'+ paramValue +'"';
 											    }
 											}
@@ -2850,9 +2850,9 @@ function fsnGetContent(instance) {
 										//}								
 									});
 								}
-								output += '[/fsn_column_inner]';
+								output += '[/olla_column_inner]';
 							});
-							output += '[/fsn_row_inner]';
+							output += '[/olla_row_inner]';
 						});
 					}
 				} else if (currentChild.hasClass('tabs-container')) {
@@ -2868,12 +2868,12 @@ function fsnGetContent(instance) {
 								for (var k in dataAttributes) {
 									if (dataAttributes.hasOwnProperty(k)) {								
 										var paramName = k.replace(/[-]/g,'_');
-										var paramValue = fsnCustomEntitiesEncode(dataAttributes[k]);
+										var paramValue = ollaCustomEntitiesEncode(dataAttributes[k]);
 										tabsContainerParams += ' '+ paramName +'="'+ paramValue +'"';
 								    }
 								}
 							}
-							output += '[fsn_tabs'+ tabsContainerParams +']';
+							output += '[olla_tabs'+ tabsContainerParams +']';
 							var tabs = tabsContainer.find('.tab-container');
 							tabs.each(function() {
 								//build inner column shortcodes
@@ -2884,31 +2884,31 @@ function fsnGetContent(instance) {
 									for (var k in dataAttributes) {
 										if (dataAttributes.hasOwnProperty(k)) {								
 											var paramName = k.replace(/[-]/g,'_');
-											var paramValue = fsnCustomEntitiesEncode(dataAttributes[k]);
+											var paramValue = ollaCustomEntitiesEncode(dataAttributes[k]);
 											tabContainerParams += ' '+ paramName +'="'+ paramValue +'"';
 									    }
 									}
 								}
-								output += '[fsn_tab'+ tabContainerParams +']';
+								output += '[olla_tab'+ tabContainerParams +']';
 								//build tab content
 								var tabChildren = tabContainer.find('.tab').children();
 								tabChildren.each(function() {
 									var currentChild = jQuery(this);
-									if (currentChild.hasClass('fsn-element')) {
+									if (currentChild.hasClass('olla-element')) {
 										//build elements
 										var element = jQuery(this).find('.element-text-holder');
 										if (element.length != 0) {
 											element.each(function() {
 												var currentElement = jQuery(this);
 												var textContent = currentElement.html();
-												var shortcodeTag = currentElement.parent('.fsn-element').attr('data-shortcode-tag');
+												var shortcodeTag = currentElement.parent('.olla-element').attr('data-shortcode-tag');
 												var dataAttributes = getDataAttrs(currentElement);					
 												var elementParams = '';
 												if (dataAttributes.length != 0) {						
 													for (var k in dataAttributes) {
 														if (dataAttributes.hasOwnProperty(k)) {								
 															var paramName = k.replace(/[-]/g,'_');
-															var paramValue = fsnCustomEntitiesEncode(dataAttributes[k]);
+															var paramValue = ollaCustomEntitiesEncode(dataAttributes[k]);
 															elementParams += ' '+ paramName +'="'+ paramValue +'"';
 													    }
 													}
@@ -2933,12 +2933,12 @@ function fsnGetContent(instance) {
 													for (var k in dataAttributes) {
 														if (dataAttributes.hasOwnProperty(k)) {								
 															var paramName = k.replace(/[-]/g,'_');
-															var paramValue = fsnCustomEntitiesEncode(dataAttributes[k]);
+															var paramValue = ollaCustomEntitiesEncode(dataAttributes[k]);
 															rowInnerParams += ' '+ paramName +'="'+ paramValue +'"';
 													    }
 													}
 												}
-												output += '[fsn_row_inner'+ rowInnerParams +']';
+												output += '[olla_row_inner'+ rowInnerParams +']';
 												var rowInnerChildren = rowInner.find('[class*="col-"]');
 												rowInnerChildren.each(function() {
 													//build inner column shortcodes
@@ -2949,26 +2949,26 @@ function fsnGetContent(instance) {
 														for (var k in dataAttributes) {
 															if (dataAttributes.hasOwnProperty(k)) {								
 																var paramName = k.replace(/[-]/g,'_');
-																var paramValue = fsnCustomEntitiesEncode(dataAttributes[k]);
+																var paramValue = ollaCustomEntitiesEncode(dataAttributes[k]);
 																columnInnerParams += ' '+ paramName +'="'+ paramValue +'"';
 														    }
 														}
 													}
-													output += '[fsn_column_inner'+ columnInnerParams +']';
+													output += '[olla_column_inner'+ columnInnerParams +']';
 													//build elements
 													var element = jQuery(this).find('.element-text-holder');
 													if (element.length != 0) {				
 														element.each(function() {
 															var currentElement = jQuery(this);
 															var textContent = currentElement.html();
-															var shortcodeTag = currentElement.parent('.fsn-element').attr('data-shortcode-tag');
+															var shortcodeTag = currentElement.parent('.olla-element').attr('data-shortcode-tag');
 															var dataAttributes = getDataAttrs(currentElement);					
 															var elementParams = '';
 															if (dataAttributes.length != 0) {						
 																for (var k in dataAttributes) {
 																	if (dataAttributes.hasOwnProperty(k)) {								
 																		var paramName = k.replace(/[-]/g,'_');
-																		var paramValue = fsnCustomEntitiesEncode(dataAttributes[k]);
+																		var paramValue = ollaCustomEntitiesEncode(dataAttributes[k]);
 																		elementParams += ' '+ paramName +'="'+ paramValue +'"';
 																    }
 																}
@@ -2980,31 +2980,31 @@ function fsnGetContent(instance) {
 															//}								
 														});
 													}
-													output += '[/fsn_column_inner]';
+													output += '[/olla_column_inner]';
 												});
-												output += '[/fsn_row_inner]';
+												output += '[/olla_row_inner]';
 											});
 										}
 									}
 								});
-								output += '[/fsn_tab]';
+								output += '[/olla_tab]';
 							});
-							output += '[/fsn_tabs]';
+							output += '[/olla_tabs]';
 						});
 					}
 				}
 			});
-			output += '[/fsn_column]';
+			output += '[/olla_column]';
 		});
-		output += '[/fsn_row]';
+		output += '[/olla_row]';
 	});
 	
 	return output;
 }
 
-function fsnUpdateContent(instance) {
-	if (instance.attr('id') == 'fsn-main-ui') {
-		content = fsnGetContent(instance);
+function ollaUpdateContent(instance) {
+	if (instance.attr('id') == 'olla-main-ui') {
+		content = ollaGetContent(instance);
 		//refocus on main content editor	
 		if (tinymce.get( 'content' ).isHidden()) {
 			tinymce.get( 'content' ).show();
@@ -3074,11 +3074,11 @@ function launchComponentsModal(id) {
 		action: 'components_modal',
 		component_id: id,
 		post_id: postID,
-		security: fsnJS.fsnEditNonce
+		security: ollaJS.ollaEditNonce
 	};
 	jQuery.post(ajaxurl, data, function(response) {
 		if (response == '-1') {
-			alert(fsnL10n.error);
+			alert(ollaL10n.error);
 			return false;
 		}
 		//append modal to body
@@ -3088,12 +3088,12 @@ function launchComponentsModal(id) {
 		componentsModal.modal();
 		//init Fusion UI events on show
 		componentsModal.on('shown.bs.modal', function(e) {
-			var componentInterfaceGrid = componentsModal.find('.fsn-interface-grid');
+			var componentInterfaceGrid = componentsModal.find('.olla-interface-grid');
 			if (componentInterfaceGrid.is(':empty')) {
-				var fsnInitContent = fsnGetRow(fsnGetColumn(12, fsnGetElement('fsn_text', fsnL10n.text_label)));
-				componentInterfaceGrid.empty().append(fsnInitContent);
+				var ollaInitContent = ollaGetRow(ollaGetColumn(12, ollaGetElement('olla_text', ollaL10n.text_label)));
+				componentInterfaceGrid.empty().append(ollaInitContent);
 			}
-			fsnInitUIevents(componentInterfaceGrid);
+			ollaInitUIevents(componentInterfaceGrid);
 		});
 		//dismiss notices
 		componentsModal.on('click', '.notice-dismiss' , function() {
@@ -3111,16 +3111,16 @@ function launchComponentsModal(id) {
 
 //update components
 jQuery(document).ready(function() {
-	jQuery('body').on('click', '.fsn-save-component', function(e) {
+	jQuery('body').on('click', '.olla-save-component', function(e) {
 		e.preventDefault();
 				
 		var editForm = jQuery(this).closest('#edit_component');
-		var instance = editForm.find('.fsn-interface-grid');
+		var instance = editForm.find('.olla-interface-grid');
 
 		var postID = jQuery('input#post_ID').val();
 		var componentID = editForm.find('input[name="component_id"]').val();
 		var componentTitle = editForm.find('input[name="component_title"]').val();
-		var componentContent = fsnGetContent(instance);
+		var componentContent = ollaGetContent(instance);
 		
 		editForm.addClass('saving');
 				
@@ -3131,11 +3131,11 @@ jQuery(document).ready(function() {
 			component_id: componentID,
 			component_title: componentTitle,
 			component_content: componentContent,
-			security: fsnJS.fsnEditNonce
+			security: ollaJS.ollaEditNonce
 		};
 		jQuery.post(ajaxurl, data, function(response) {
 			if (response == '-1') {
-				alert(fsnL10n.error);
+				alert(ollaL10n.error);
 				return false;
 			}
 			//update message
@@ -3159,7 +3159,7 @@ jQuery(document).ready(function() {
 					var componentSelector = jQuery(this);
 					componentSelector.find('option[value="'+ componentID +'"]').text(componentTitle);
 					componentSelector.select2('destroy');
-					fsnInitPostSelect();
+					ollaInitPostSelect();
 				});
 			}
 		});
@@ -3172,7 +3172,7 @@ jQuery(document).ready(function() {
 
 jQuery(document).ready(function() {
 	//add image button
-	jQuery('body').on('click', '.fsn_upload_image', function(e) {
+	jQuery('body').on('click', '.olla_upload_image', function(e) {
 		e.preventDefault();
 		var buttonTrigger = jQuery(this);
 		var postID = jQuery('input#post_ID').val();
@@ -3185,9 +3185,9 @@ jQuery(document).ready(function() {
 	    }
 	    // Create a new media frame
 	    var frame = wp.media({
-	        title: fsnL10n.media_image_select,
+	        title: ollaL10n.media_image_select,
 	        button: {
-	            text: fsnL10n.media_image_use,
+	            text: ollaL10n.media_image_use,
 	        },
 	        multiple: false // Set this to true to allow multiple files to be selected
 	    });
@@ -3200,11 +3200,11 @@ jQuery(document).ready(function() {
 				action: 'update_image_preview',
 				id: attachment.id,
 				post_id: postID,
-				security: fsnJS.fsnEditNonce
+				security: ollaJS.ollaEditNonce
 			};
 			jQuery.post(ajaxurl, data, function(response) {
 				if (response == '-1') {
-					alert(fsnL10n.error);
+					alert(ollaL10n.error);
 					return false;
 				}
 				if (targetField.siblings('.image-field-preview').length != 0) {
@@ -3213,7 +3213,7 @@ jQuery(document).ready(function() {
 				targetField.after(response);
 				//update trigger button text
 		        buttonTrigger.find('.button-verb').html(buttonTrigger.attr('data-isset'));
-		        buttonTrigger.siblings('.fsn-remove-image').removeClass('deactivated');
+		        buttonTrigger.siblings('.olla-remove-image').removeClass('deactivated');
 			});
 	    });
 	    //Preselect Image if already set
@@ -3229,10 +3229,10 @@ jQuery(document).ready(function() {
 	    frame.open();
     });
     //remove image button
-    jQuery('body').on('click', '.fsn-remove-image', function(e) {
+    jQuery('body').on('click', '.olla-remove-image', function(e) {
 	    e.preventDefault();
 	    var button = jQuery(this);
-	    var editButton = button.siblings('.fsn_upload_image');
+	    var editButton = button.siblings('.olla_upload_image');
         editButton.find('.button-verb').html(editButton.attr('data-empty'));
 	    button.addClass('deactivated');
 	    button.siblings('.image-field-preview').remove();
@@ -3241,7 +3241,7 @@ jQuery(document).ready(function() {
     
     
     //add video button
-	jQuery('body').on('click', '.fsn_upload_video', function(e) {
+	jQuery('body').on('click', '.olla_upload_video', function(e) {
 		e.preventDefault();
 		var buttonTrigger = jQuery(this);
 		var postID = jQuery('input#post_ID').val();
@@ -3254,9 +3254,9 @@ jQuery(document).ready(function() {
 	    }
 	    // Create a new media frame
 	    var frame = wp.media({
-	        title: fsnL10n.media_video_select,
+	        title: ollaL10n.media_video_select,
 	        button: {
-	            text: fsnL10n.media_video_select,
+	            text: ollaL10n.media_video_select,
 	        },
 	        multiple: false // Set this to true to allow multiple files to be selected
 	    });
@@ -3269,11 +3269,11 @@ jQuery(document).ready(function() {
 				action: 'update_video_preview',
 				id: attachment.id,
 				post_id: postID,
-				security: fsnJS.fsnEditNonce
+				security: ollaJS.ollaEditNonce
 			};
 			jQuery.post(ajaxurl, data, function(response) {
 				if (response == '-1') {
-					alert(fsnL10n.error);
+					alert(ollaL10n.error);
 					return false;
 				}
 				if (targetField.siblings('.video-field-preview').length != 0) {
@@ -3282,7 +3282,7 @@ jQuery(document).ready(function() {
 				targetField.after(response);
 				//update trigger button text
 		        buttonTrigger.find('.button-verb').html(buttonTrigger.attr('data-isset'));
-		        buttonTrigger.siblings('.fsn-remove-video').removeClass('deactivated');
+		        buttonTrigger.siblings('.olla-remove-video').removeClass('deactivated');
 			});
 	    });
 	    //Preselect Video if already set
@@ -3298,10 +3298,10 @@ jQuery(document).ready(function() {
 	    frame.open();
     });
     //remove video button
-    jQuery('body').on('click', '.fsn-remove-video', function(e) {
+    jQuery('body').on('click', '.olla-remove-video', function(e) {
 	    e.preventDefault();
 	    var button = jQuery(this);
-	    var editButton = button.siblings('.fsn_upload_video');
+	    var editButton = button.siblings('.olla_upload_video');
         editButton.find('.button-verb').html(editButton.attr('data-empty'));
 	    button.addClass('deactivated');
 	    button.siblings('.video-field-preview').remove();
@@ -3310,7 +3310,7 @@ jQuery(document).ready(function() {
 });
 
 //In throttling, the code execution is limited to once in a specified time period.
-function fsnThrottle(callback, wait) {  
+function ollaThrottle(callback, wait) {  
     var time,
     go = true;
     return function() {
@@ -3326,7 +3326,7 @@ function fsnThrottle(callback, wait) {
 }
 
 //In debouncing, the code is not executed until the event has not been fired for a set amount of time.
-function fsnDebounce(callback, wait) {  
+function ollaDebounce(callback, wait) {  
     var time;
     return function() {
         clearTimeout(time);

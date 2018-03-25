@@ -16,6 +16,7 @@ define( 'OLLA_VERSION', '1.0.0' );
 
 
 class OllaCore	{
+
 	public function __construct() {
 		// Initialize the language files
 		add_action('plugins_loaded', array($this, 'load_textdomain'));
@@ -173,11 +174,10 @@ class OllaCore	{
 			wp_enqueue_script( 'wp-color-picker' );
 			wp_enqueue_style( 'wp-color-picker' );
 			//plugin
-			wp_enqueue_script( 'olla_core_admin', plugin_dir_url( __FILE__ ) . 'includes/js/olla-core-admin.js', array('jquery'), '1.3.0', true );
-			wp_enqueue_style( 'olla_core_admin', plugin_dir_url( __FILE__ ) . 'includes/css/olla-core-admin.css', false, '1.3.0' );
-			if ($user_admin_color != 'fresh') {
-				wp_enqueue_style( 'olla_core_admin_color_scheme', plugin_dir_url( __FILE__ ) . 'includes/css/colors/'. $user_admin_color .'/colors.css', false, '1.3.0' );
-			}
+			wp_enqueue_script( 'olla_core_admin', plugin_dir_url( __FILE__ ) . 'assets/admin/js/admin.js', array('jquery'), '1.0.0', true );
+			wp_enqueue_style( 'olla_core_admin', plugin_dir_url( __FILE__ ) . 'assets/admin/css/admin.css', false, '1.0.0' );
+
+			
 			wp_localize_script( 'olla_core_admin', 'ollaJS', array(
 					'ollaEditNonce' => wp_create_nonce('olla-admin-edit')
 				)
